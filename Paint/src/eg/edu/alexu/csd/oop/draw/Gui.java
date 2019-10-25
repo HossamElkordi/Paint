@@ -26,7 +26,8 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 
 public class Gui extends JPanel{
-
+//ahmed yasser
+	//hossam el kordi
 	/**
 	 * 
 	 */
