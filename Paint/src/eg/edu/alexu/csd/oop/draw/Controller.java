@@ -188,6 +188,9 @@ public class Controller {
             if(e.getX()>selectedX1&&e.getX()<selectedX1+12&&e.getY()>selectedY1&&e.getY()<selectedY1+12){state=1;return true;}
             if(e.getX()>selectedX3&&e.getX()<selectedX3+12&&e.getY()>selectedY3&&e.getY()<selectedY3+12){state=2;return true;}
         }
+        if(selectedShape!=null&&selectedShape.getClass()==Circle.class){
+            if(e.getX()>selectedX2&&e.getX()<selectedX2+12&&e.getY()>selectedY2&&e.getY()<selectedY2+12){return true;}
+        }
         return false;
     }
  
@@ -284,6 +287,20 @@ public class Controller {
                     selectedShape.getProperties().put("x3", (double) (dummyX + deltaX));
                     selectedShape.getProperties().put("y3", (double) (dummyY + deltaY));
                 }
+            }
+            if(selectedShape.getClass()==Circle.class){
+                if(!resizeFlag){dummyX=selectedShape.getProperties().get("x2").intValue();dummyY=selectedShape.getProperties().get("y2").intValue();resizeFlag=true;}
+                deltaX= (int) (e.getX()-firstX);
+                deltaY= (int) (e.getY()-firstY);
+
+                if(swichflag||selectedShape.getProperties().get("x1")>selectedShape.getProperties().get("x2")&&selectedShape.getProperties().get("y1")>selectedShape.getProperties().get("y2")) {
+                    selectedShape.getProperties().put("x2", (double) (dummyX - deltaX));
+                    selectedShape.getProperties().put("y2", (double) (dummyY - deltaY));
+                    swichflag=true;
+                }
+                else{selectedShape.getProperties().put("x2", (double) (dummyX + deltaX));
+                    selectedShape.getProperties().put("y2", (double) (dummyY + deltaY));}
+                selectedShape.getProperties().put("Radius",Math.abs((selectedShape.getProperties().get("x1")-selectedShape.getProperties().get("x2"))));
             }
  
         }
