@@ -21,6 +21,7 @@ public class Controller {
     public void setFirts(Point p){
         firstX= (int) p.getX();firstY= (int) p.getY();
     }
+
  
     public void shapeCreator(char shapeChar, int x1, int y1, Color fillColor, Color strokeColor) {
         switch(shapeChar) {
@@ -117,17 +118,19 @@ public class Controller {
    
     private void sqrProp(int x1, int y1, int x2, int y2) {
         double type;
-        if(x1<x2){
-            if(y1<y2){type=0;}
-            else type=1;
+        int temp;
+        if(x1>x2){
+            x2=x1+Math.abs(x1-x2);
         }
-        else{
-            if(y1<y2){type=2;}
-            else {type=3;}
+        if(y1>y2){
+            y2=y1+Math.abs(y1-y2);
         }
+        type=0;
+
         shape.getProperties().put("type",type);
         shape.getProperties().put("Length", 2.0 * Math.max(Math.abs(x2-x1), Math.abs(y2-y1)));
         shape.getProperties().put("x2", shape.getProperties().get("x1")+shape.getProperties().get("Length")/2);
+        shape.getProperties().put("y2", shape.getProperties().get("y1")+shape.getProperties().get("Length")/2);
         shape.getProperties().put("Area", Math.pow(2.0 * Math.abs(x2-x1), 2));
         shape.getProperties().put("Perimeter", 4.0 * 2.0 * Math.abs(x2-x1));
         shape.setPosition(new Point(x1, y1));
@@ -214,15 +217,11 @@ public class Controller {
                 if(!resizeFlag){dummyX=selectedShape.getProperties().get("x2").intValue();dummyY=selectedShape.getProperties().get("y2").intValue();resizeFlag=true;}
                 deltaX= (int) (e.getX()-firstX);
                 deltaY= (int) (e.getY()-firstY);
- 
-                if(swichflag||selectedShape.getProperties().get("x1")>selectedShape.getProperties().get("x2")&&selectedShape.getProperties().get("y1")>selectedShape.getProperties().get("y2")) {
-                    selectedShape.getProperties().put("x2", (double) (dummyX - deltaX));
-                    selectedShape.getProperties().put("y2", (double) (dummyY - deltaY));
-                    swichflag=true;
+                if(dummyX+deltaX>selectedShape.getProperties().get("x1")||dummyY+deltaY>selectedShape.getProperties().get("y1")){
+                    selectedShape.getProperties().put("x2", (double) (dummyX+deltaX));
+                    selectedShape.getProperties().put("y2", (double) (dummyY+deltaY));
                 }
-                else{selectedShape.getProperties().put("x2", (double) (dummyX + deltaX));
-                    selectedShape.getProperties().put("y2", (double) (dummyY + deltaY));}
-                selectedShape.getProperties().put("Length",Math.abs(2*(selectedShape.getProperties().get("x1")-selectedShape.getProperties().get("x2"))));
+
             }
             if(selectedShape.getClass()==Ellipse.class){
                 if(!resizeFlag){dummyX=selectedShape.getProperties().get("x2").intValue();dummyY=selectedShape.getProperties().get("y2").intValue();resizeFlag=true;}
