@@ -118,7 +118,7 @@ public class Controller {
    
     private void sqrProp(int x1, int y1, int x2, int y2) {
         double type;
-        int temp;
+
         if(x1>x2){
             x2=x1+Math.abs(x1-x2);
         }
@@ -145,14 +145,13 @@ public class Controller {
    
     private void cirProp(int x1, int y1, int x2, int y2) {
         double type;
-        if(x1<x2){
-            if(y1<y2){type=0;}
-            else type=1;
+        if(x1>x2){
+            x2=x1+Math.abs(x1-x2);
         }
-        else{
-            if(y1<y2){type=2;}
-            else {type=3;}
+        if(y1>y2){
+            y2=y1+Math.abs(y1-y2);
         }
+        type=0;
         shape.getProperties().put("x1", (double) x1);
         shape.getProperties().put("x2", (double) x2);
         shape.getProperties().put("y1", (double) y1);
@@ -202,6 +201,11 @@ public class Controller {
             shape=selectedShape;sqrProp(selectedShape.getProperties().get("x1").intValue(),selectedShape.getProperties().get("y1").intValue(),selectedShape.getProperties().get("x2").intValue(),selectedShape.getProperties().get("y2").intValue());
  
         }
+        if(selectedShape!=null&&selectedShape.getClass()==Circle.class){
+            shape=selectedShape;cirProp(selectedShape.getProperties().get("x1").intValue(),selectedShape.getProperties().get("y1").intValue(),selectedShape.getProperties().get("x2").intValue(),selectedShape.getProperties().get("y2").intValue());
+
+        }
+
     }
  
     public void ShapeResize(Point e){
@@ -213,14 +217,16 @@ public class Controller {
                 selectedShape.getProperties().put("x2", (double) (dummyX+deltaX));
                 selectedShape.getProperties().put("y2", (double) (dummyY+deltaY));
             }
-            if(selectedShape.getClass()==Square.class){
+            if(selectedShape.getClass()==Square.class||selectedShape.getClass()==Circle.class){
                 if(!resizeFlag){dummyX=selectedShape.getProperties().get("x2").intValue();dummyY=selectedShape.getProperties().get("y2").intValue();resizeFlag=true;}
                 deltaX= (int) (e.getX()-firstX);
                 deltaY= (int) (e.getY()-firstY);
-                if(dummyX+deltaX>selectedShape.getProperties().get("x1")&&dummyY+deltaY>selectedShape.getProperties().get("y1")){
+                if((dummyX+deltaX>selectedShape.getProperties().get("x1")&&dummyY+deltaY>selectedShape.getProperties().get("y1"))||
+                        ((Math.abs(dummyX+deltaX-selectedShape.getProperties().get("x1"))<5)&&(Math.abs(dummyY+deltaY-selectedShape.getProperties().get("y1"))<5))){
                     selectedShape.getProperties().put("x2", (double) (dummyX+deltaX));
                     selectedShape.getProperties().put("y2", (double) (dummyY+deltaY));
                 }
+                resizeFinalizer();
 
             }
             if(selectedShape.getClass()==Ellipse.class){
@@ -287,7 +293,7 @@ public class Controller {
                     selectedShape.getProperties().put("y3", (double) (dummyY + deltaY));
                 }
             }
-            if(selectedShape.getClass()==Circle.class){
+            /*if(selectedShape.getClass()==Circle.class){
                 if(!resizeFlag){dummyX=selectedShape.getProperties().get("x2").intValue();dummyY=selectedShape.getProperties().get("y2").intValue();resizeFlag=true;}
                 deltaX= (int) (e.getX()-firstX);
                 deltaY= (int) (e.getY()-firstY);
@@ -300,7 +306,7 @@ public class Controller {
                 else{selectedShape.getProperties().put("x2", (double) (dummyX + deltaX));
                     selectedShape.getProperties().put("y2", (double) (dummyY + deltaY));}
                 selectedShape.getProperties().put("Radius",Math.abs((selectedShape.getProperties().get("x1")-selectedShape.getProperties().get("x2"))));
-            }
+            }*/
  
         }
  
