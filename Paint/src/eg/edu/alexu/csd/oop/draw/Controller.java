@@ -217,7 +217,7 @@ public class Controller {
                 if(!resizeFlag){dummyX=selectedShape.getProperties().get("x2").intValue();dummyY=selectedShape.getProperties().get("y2").intValue();resizeFlag=true;}
                 deltaX= (int) (e.getX()-firstX);
                 deltaY= (int) (e.getY()-firstY);
-                if(dummyX+deltaX>selectedShape.getProperties().get("x1")||dummyY+deltaY>selectedShape.getProperties().get("y1")){
+                if(dummyX+deltaX>selectedShape.getProperties().get("x1")&&dummyY+deltaY>selectedShape.getProperties().get("y1")){
                     selectedShape.getProperties().put("x2", (double) (dummyX+deltaX));
                     selectedShape.getProperties().put("y2", (double) (dummyY+deltaY));
                 }
