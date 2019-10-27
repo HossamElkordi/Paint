@@ -119,7 +119,7 @@ public class Gui extends JPanel{
 				fileChooser.setFileFilter(filter);
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				if(fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
-					control.getFromDisk(fileChooser.getSelectedFile().getAbsolutePath());
+					control.keepOnDisk(fileChooser.getSelectedFile().getAbsolutePath());
 					update(getPanelGraphics());
 				}
 			}
@@ -134,7 +134,7 @@ public class Gui extends JPanel{
 				fileChooser.setDialogTitle("Choose a file");
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-					control.keepOnDisk(fileChooser.getSelectedFile().getAbsolutePath() + "\\");
+					control.getFromDisk(fileChooser.getSelectedFile().getAbsolutePath() + "\\");
 					update(getPanelGraphics());
 				}
 			}
