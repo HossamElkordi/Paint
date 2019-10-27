@@ -115,8 +115,6 @@ public class Gui extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				fileChooser = new JFileChooser();
 				fileChooser.setDialogTitle("Pick a directory");
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Files", "xml", "json");
-				fileChooser.setFileFilter(filter);
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				if(fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 					control.keepOnDisk(fileChooser.getSelectedFile().getAbsolutePath());
@@ -132,9 +130,10 @@ public class Gui extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				fileChooser = new JFileChooser();
 				fileChooser.setDialogTitle("Choose a file");
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Files", "xml", "json");
+				fileChooser.setFileFilter(filter);
 				if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-					control.getFromDisk(fileChooser.getSelectedFile().getAbsolutePath() + "\\");
+					control.getFromDisk(fileChooser.getSelectedFile().getAbsolutePath());
 					update(getPanelGraphics());
 				}
 			}
