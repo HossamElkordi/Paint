@@ -460,7 +460,6 @@ public class Gui extends JPanel{
 
 	    	public void mousePressed(MouseEvent e) {
 				if(select) { // to identify the shape to be moved(or resized)
-
                      control.setFirstPoint(e.getPoint());
 					if(!control.isinsideresizerect(e.getPoint())) control.setSelectedShape(e.getPoint());
 					else{
@@ -468,8 +467,6 @@ public class Gui extends JPanel{
 					    moveFlag=true;
                     }
 					control.shapeLimitAdder(getPanelGraphics());
-
-
 				}else { // base case : identify the first point of the shape to be drawn
 					if(shapeChar != ' ') {
 						x2 = e.getX();

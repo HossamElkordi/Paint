@@ -287,7 +287,6 @@ public class Controller {
             }
         }
     }
-    
  
     public void shapeLimitAdder(Graphics g){
         if(selectedShape!=null) {g.setColor(Color.gray);

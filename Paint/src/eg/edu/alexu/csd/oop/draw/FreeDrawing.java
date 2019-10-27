@@ -27,4 +27,18 @@ public class FreeDrawing extends Shapes{
 			canvas.drawLine(points.get(i).x, points.get(i).y, points.get(i + 1).x, points.get(i + 1).y);
 		}
 	}
+	
+	private ArrayList<Point> getPoints() {
+		return points;
+	}
+
+	private void setPoints(ArrayList<Point> points) {
+		this.points = points;
+	}
+	
+	public Object clone() throws CloneNotSupportedException{
+		FreeDrawing f = new FreeDrawing(this.color);
+		f.setPoints(this.getPoints());
+		return f;
+	}
 }
