@@ -7,21 +7,24 @@ import java.awt.Point;
 public class Controller {
    
     private Engine engine;
+    
     private Shape shape;
     private FreeDrawing f;
     private Point firstPoint;
     private Shape selectedShape;
+    private Shape newShape;
     private int selectedX1,selectedX2,selectedY1,selectedY2,selectedX3,selectedY3,firstX,firstY,dummyX,dummyY,deltaX,deltaY,state=0;
-    boolean resizeFlag=false,swichflag=false;
+    boolean resizeFlag = false;
+    boolean moving = false;
    
     public Controller() {
         engine = new Engine();
     }
  
-    public void setFirts(Point p){
-        firstX= (int) p.getX();firstY= (int) p.getY();
+    public void setFirst(Point p){
+        firstX= (int) p.getX();
+        firstY= (int) p.getY();
     }
-
  
     public void shapeCreator(char shapeChar, int x1, int y1, Color fillColor, Color strokeColor) {
         switch(shapeChar) {
@@ -113,9 +116,7 @@ public class Controller {
         shape.getProperties().put("Perimeter", 2.0 * (Math.abs(x2-x1) + Math.abs(y2-y1)));
         shape.setPosition(new Point((x1+x2)/2, (y1+y2)/2));
     }
- 
- 
-   
+    
     private void sqrProp(int x1, int y1, int x2, int y2) {
         double type;
 
@@ -166,7 +167,6 @@ public class Controller {
     private void trProp(int x1, int y1, int x2, int y2) {
         shape.getProperties().put("x3", (double) x1);
         shape.getProperties().put("y3", (double) y2);
-        shape.getProperties().put("Perimeter", Math.abs(x2-x1) + Math.abs(y2-y1) + Math.hypot(x2-x1, y2-y1));
         shape.setPosition(new Point(x1, y1));
     }
  
@@ -198,19 +198,18 @@ public class Controller {
  
     public void resizeFinalizer(){
         if(selectedShape!=null&&selectedShape.getClass()==Square.class){
-            shape=selectedShape;sqrProp(selectedShape.getProperties().get("x1").intValue(),selectedShape.getProperties().get("y1").intValue(),selectedShape.getProperties().get("x2").intValue(),selectedShape.getProperties().get("y2").intValue());
- 
-        }
+            shape=selectedShape;
+            sqrProp(selectedShape.getProperties().get("x1").intValue(),selectedShape.getProperties().get("y1").intValue(),selectedShape.getProperties().get("x2").intValue(),selectedShape.getProperties().get("y2").intValue());
+         }
         if(selectedShape!=null&&selectedShape.getClass()==Circle.class){
-            shape=selectedShape;cirProp(selectedShape.getProperties().get("x1").intValue(),selectedShape.getProperties().get("y1").intValue(),selectedShape.getProperties().get("x2").intValue(),selectedShape.getProperties().get("y2").intValue());
-
+            shape=selectedShape;
+            cirProp(selectedShape.getProperties().get("x1").intValue(),selectedShape.getProperties().get("y1").intValue(),selectedShape.getProperties().get("x2").intValue(),selectedShape.getProperties().get("y2").intValue());
         }
-
     }
  
     public void ShapeResize(Point e){
         if(selectedShape!=null){
-            if(selectedShape.getClass()==Rectangle.class){
+            if(selectedShape.getClass()==Rectangle.class||selectedShape.getClass()==Ellipse.class){
                 if(!resizeFlag){dummyX=selectedShape.getProperties().get("x2").intValue();dummyY=selectedShape.getProperties().get("y2").intValue();resizeFlag=true;}
                 deltaX= (int) (e.getX()-firstX);
                 deltaY= (int) (e.getY()-firstY);
@@ -228,13 +227,6 @@ public class Controller {
                 }
                 resizeFinalizer();
 
-            }
-            if(selectedShape.getClass()==Ellipse.class){
-                if(!resizeFlag){dummyX=selectedShape.getProperties().get("x2").intValue();dummyY=selectedShape.getProperties().get("y2").intValue();resizeFlag=true;}
-                deltaX= (int) (e.getX()-firstX);
-                deltaY= (int) (e.getY()-firstY);
-                selectedShape.getProperties().put("x2", (double) (dummyX+deltaX));
-                selectedShape.getProperties().put("y2", (double) (dummyY+deltaY));
             }
             if(selectedShape.getClass()==LineSegment.class) {
                 if (state==0) {
@@ -293,24 +285,9 @@ public class Controller {
                     selectedShape.getProperties().put("y3", (double) (dummyY + deltaY));
                 }
             }
-            /*if(selectedShape.getClass()==Circle.class){
-                if(!resizeFlag){dummyX=selectedShape.getProperties().get("x2").intValue();dummyY=selectedShape.getProperties().get("y2").intValue();resizeFlag=true;}
-                deltaX= (int) (e.getX()-firstX);
-                deltaY= (int) (e.getY()-firstY);
-
-                if(swichflag||selectedShape.getProperties().get("x1")>selectedShape.getProperties().get("x2")&&selectedShape.getProperties().get("y1")>selectedShape.getProperties().get("y2")) {
-                    selectedShape.getProperties().put("x2", (double) (dummyX - deltaX));
-                    selectedShape.getProperties().put("y2", (double) (dummyY - deltaY));
-                    swichflag=true;
-                }
-                else{selectedShape.getProperties().put("x2", (double) (dummyX + deltaX));
-                    selectedShape.getProperties().put("y2", (double) (dummyY + deltaY));}
-                selectedShape.getProperties().put("Radius",Math.abs((selectedShape.getProperties().get("x1")-selectedShape.getProperties().get("x2"))));
-            }*/
- 
         }
- 
     }
+    
  
     public void shapeLimitAdder(Graphics g){
         if(selectedShape!=null) {g.setColor(Color.gray);
@@ -422,16 +399,25 @@ public class Controller {
  
         }
     }
+   
     public void keepShapes(Graphics panelGraphics) {
         engine.refresh(panelGraphics);
     }
    
     public void brush(Graphics canvas, Point p, Color fillColor, Color strokeColor) {
-        Shape s = getSelectedShape(p);
-        if(s != null) {
-            s.setFillColor(fillColor);
-            s.setColor(strokeColor);
-            s.draw(canvas);
+        setSelectedShape(p);
+        if(this.selectedShape != null) {
+        	this.selectedShape.setFillColor(fillColor);
+        	this.selectedShape.setColor(strokeColor);
+        	this.selectedShape.draw(canvas);
+            saveChanges();
+        }
+    }
+    
+    public void delete(Point p) {
+    	setSelectedShape(p);
+        if(this.selectedShape != null) {
+            engine.removeShape(this.selectedShape);
         }
     }
    
@@ -443,6 +429,11 @@ public class Controller {
         Shape[] shapes = engine.getShapes();
         for(int i = shapes.length-1; i >= 0; i--) {
             if(contains(shapes[i], p)) {
+            	try {
+        			this.newShape = (Shape)shapes[i].clone();
+        		} catch (CloneNotSupportedException e) {
+        			e.printStackTrace();
+        		}
                 return shapes[i];
             }
         }
@@ -538,7 +529,8 @@ public class Controller {
         if (this.selectedShape == null || this.firstPoint == null) {
             return; // not selecting anything
         }
-       
+        moving = true;
+        
         int x1 = (int) Math.floor(selectedShape.getProperties().get("x1"));
         int y1 = (int) Math.floor(selectedShape.getProperties().get("y1"));
         int x2 = (int) Math.floor(selectedShape.getProperties().get("x2"));
@@ -557,4 +549,16 @@ public class Controller {
        
     }
    
+    public void saveChanges() {
+    	newShape.setProperties(selectedShape.getProperties());
+    	engine.updateShape(selectedShape, newShape);
+    }
+    
+    public void getPreviousState() {
+    	engine.undo();
+    }
+    
+    public void getNextState() {
+    	engine.redo();
+    }
 }

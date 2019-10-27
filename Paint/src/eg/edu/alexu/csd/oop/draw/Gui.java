@@ -24,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
+import java.awt.Toolkit;
 
 public class Gui extends JPanel{
 //ahmed yasser
@@ -39,10 +40,12 @@ public class Gui extends JPanel{
 	private ArrayList<JToggleButton> btnArray;
 	private JToggleButton selectBtn;
 	private JToggleButton brushBtn;
+	private JToggleButton deleteBtn;
 	
 	private char shapeChar = ' ';
 	private boolean brush;
 	private boolean select;
+	private boolean delete;
 	private Color fillColor;
 	private Color strokeColor;
 	private Controller control;
@@ -84,6 +87,7 @@ public class Gui extends JPanel{
 	
 	public void setFrame(String name) {
 		frame = new JFrame(name);
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Gui.class.getResource("/Icons/paint.png")));
 		frame.setSize(1080, 720);
 		frame.setLocationRelativeTo(null); // to be relative to the center of the screen
 		frame.setExtendedState(Frame.MAXIMIZED_BOTH); // full screen
@@ -113,7 +117,7 @@ public class Gui extends JPanel{
 	public void setBtnPanel() {
 		btnPanel = new JPanel();
 		btnPanel.setBackground(SystemColor.activeCaption);
-		btnPanel.setBounds(0, 0, 1382, 105);
+		btnPanel.setBounds(0, 0, 1362, 105);
 	    frame.getContentPane().add(btnPanel);
 	    btnPanel.setLayout(null);
 	    /*
@@ -124,6 +128,9 @@ public class Gui extends JPanel{
 	    setFillColorBtn();
 	    setStrokeColorBtn();
 	    setBrushBtn();
+	    setUndoBtn();
+	    setRedoBtn();
+	    setDeleteBtn();
 	}
 	
 	private void setShapesBtns() {
@@ -200,8 +207,10 @@ public class Gui extends JPanel{
 	    					shapeChar = getShapeChar(tb.getName());
 	    					selectBtn.setSelected(false);
 							brushBtn.setSelected(false);
+							deleteBtn.setSelected(false);
 							brush = false;
 							select = false;
+			    			delete = false;
 	    				}
 	    			}
 	    		}
@@ -224,8 +233,10 @@ public class Gui extends JPanel{
 	    				shapeChar = getShapeChar(freeDrawBtn.getName());
 						selectBtn.setSelected(false);
 						brushBtn.setSelected(false);
+						deleteBtn.setSelected(false);
 						brush = false;
 						select = false;
+		    			delete = false;
 	    			}
 	    		}
 	    	}
@@ -276,6 +287,8 @@ public class Gui extends JPanel{
 					shapeChar = ' ';
 					brushBtn.setSelected(false);
 					brush = false;
+					deleteBtn.setSelected(false);
+	    			delete = false;
 				}else {
 					select = false;
 				}
@@ -311,7 +324,7 @@ public class Gui extends JPanel{
 	private void setStrokeColorBtn() {
 		strokeColor = Color.BLACK;
 		JLabel lblStroksColor = new JLabel("Stroks Color");
-	    lblStroksColor.setBounds(397, 86, 58, 14);
+	    lblStroksColor.setBounds(402, 86, 58, 14);
 	    btnPanel.add(lblStroksColor);
 	    
 	    JButton strokeColorBtn = new JButton("");
@@ -339,6 +352,8 @@ public class Gui extends JPanel{
 	    			shapeChar = ' ';
 	    			selectBtn.setSelected(false);
 	    			select = false;
+	    			deleteBtn.setSelected(false);
+	    			delete = false;
 	    		}else {
 	    			brush = false;
 	    		}
@@ -352,6 +367,75 @@ public class Gui extends JPanel{
 	    lblBrush.setHorizontalAlignment(SwingConstants.CENTER);
 	    lblBrush.setBounds(233, 86, 46, 14);
 	    btnPanel.add(lblBrush);
+	    }
+	
+	private void setUndoBtn() {
+		JButton undoBtn = new JButton("");
+		undoBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				shapeChar = ' ';
+				bg.clearSelection();
+				brush = false;
+				brushBtn.setSelected(false);
+				select = false;
+				selectBtn.setSelected(false);
+				deleteBtn.setSelected(false);
+    			delete = false;
+				control.getPreviousState();
+				update(getPanelGraphics());
+			}
+		});
+	    undoBtn.setIcon(new ImageIcon(Gui.class.getResource("/Icons/undo.png")));
+	    undoBtn.setBounds(927, 11, 40, 40);
+	    btnPanel.add(undoBtn);
+	}
+	
+	private void setRedoBtn() {
+		JButton redoBtn = new JButton("");
+		redoBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				shapeChar = ' ';
+				bg.clearSelection();
+				brush = false;
+				brushBtn.setSelected(false);
+				select = false;
+				selectBtn.setSelected(false);
+				deleteBtn.setSelected(false);
+    			delete = false;
+				control.getNextState();
+				update(getPanelGraphics());
+			}
+		});
+	    redoBtn.setIcon(new ImageIcon(Gui.class.getResource("/Icons/redo.png")));
+	    redoBtn.setBounds(977, 11, 40, 40);
+	    btnPanel.add(redoBtn);
+	}
+	
+	private void setDeleteBtn() {
+		deleteBtn = new JToggleButton("");
+		deleteBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(deleteBtn.isSelected()) {
+					delete = true;
+					bg.clearSelection();
+	    			shapeChar = ' ';
+	    			brushBtn.setSelected(false);
+	    			brush = false;
+	    			selectBtn.setSelected(false);
+	    			select = false;
+				}else {
+					delete = false;
+				}
+			}
+		});
+	    deleteBtn.setIcon(new ImageIcon(Gui.class.getResource("/Icons/delete.png")));
+	    deleteBtn.setBounds(465, 11, 50, 71);
+	    btnPanel.add(deleteBtn);
+	    
+	    JLabel lblDelete = new JLabel("Delete");
+	    lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
+	    lblDelete.setBounds(465, 86, 46, 14);
+	    btnPanel.add(lblDelete);
 	}
 
 	public void setDrawingCanvas() {
@@ -366,6 +450,11 @@ public class Gui extends JPanel{
 	    	public void mouseClicked(MouseEvent e) {
 	    		if(brush) {
 	    			control.brush(getPanelGraphics(), e.getPoint(), fillColor, strokeColor);
+	    			return;
+	    		}
+	    		if(delete) {
+	    			control.delete(e.getPoint());
+	    			update(getPanelGraphics());
 	    		}
 	    	}
 
@@ -375,7 +464,7 @@ public class Gui extends JPanel{
                      control.setFirstPoint(e.getPoint());
 					if(!control.isinsideresizerect(e.getPoint())) control.setSelectedShape(e.getPoint());
 					else{
-					    control.setFirts(e.getPoint());
+					    control.setFirst(e.getPoint());
 					    moveFlag=true;
                     }
 					control.shapeLimitAdder(getPanelGraphics());
@@ -393,16 +482,18 @@ public class Gui extends JPanel{
 			public void mouseReleased(MouseEvent e) {
 				if (select) {
 					control.setFirstPoint(null); // deleting the point i'm moving a certain shape of it
+					control.resizeFinalizer();
+					if(control.resizeFlag || control.moving) {
+						control.saveChanges();
+					}
 				}else {
 					if(shapeChar != ' ') {
 						control.shapeFinisher(shapeChar, x2, y2);
 					}
 				}
-				moveFlag=false;
-				control.resizeFlag=false;
-				control.swichflag=false;
-				control.resizeFinalizer();
-
+				moveFlag = false;
+				control.resizeFlag = false;
+				control.moving = false;
 			}
 	    };
 	    
@@ -434,6 +525,8 @@ public class Gui extends JPanel{
 		super.paintComponent(g);
 		if(shapeChar != ' ') {
 			 control.shapeDrawer(g, x2, y2);// drawing the desired shape
+		}else {
+			control.keepShapes(getPanelGraphics());
 		}
 	}
 	

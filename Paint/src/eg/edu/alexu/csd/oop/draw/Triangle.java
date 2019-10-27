@@ -58,12 +58,13 @@ public class Triangle extends Shapes {
 		int y1 = (int) Math.floor(super.getProperties().get("y1"));
 		int x2 = (int) Math.floor(super.getProperties().get("x2"));
 		int y2 = (int) Math.floor(super.getProperties().get("y2"));
+		int x3 = (int) Math.floor(super.getProperties().get("x3"));
+		int y3 = (int) Math.floor(super.getProperties().get("y3"));
 		Triangle t = new Triangle(x1, y1, super.getFillColor(), super.getColor());
 		t.getProperties().put("x2", (double) x2);
 		t.getProperties().put("y2", (double) y2);
-		t.getProperties().put("x3", (double) x1);
-		t.getProperties().put("y3", (double) y2);
-		t.getProperties().put("Perimeter", Math.abs(x2-x1) + Math.abs(y2-y1) + Math.hypot(x2-x1, y2-y1));		
+		t.getProperties().put("x3", (double) x3);
+		t.getProperties().put("y3", (double) y3);		
 		t.setPosition(super.getPosition());
 		return t;
 	}
