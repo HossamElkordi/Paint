@@ -118,7 +118,6 @@ public class Gui extends JPanel{
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				if(fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 					control.keepOnDisk(fileChooser.getSelectedFile().getAbsolutePath());
-					update(getPanelGraphics());
 				}
 			}
 		});
@@ -397,6 +396,7 @@ public class Gui extends JPanel{
 	    btnPanel.add(lblBrush);
 	    }
 	
+	
 	private void setUndoBtn() {
 		JButton undoBtn = new JButton("");
 		undoBtn.addActionListener(new ActionListener() {
@@ -438,6 +438,7 @@ public class Gui extends JPanel{
 	    redoBtn.setBounds(977, 11, 40, 40);
 	    btnPanel.add(redoBtn);
 	}
+	
 	
 	private void setDeleteBtn() {
 		deleteBtn = new JToggleButton("");
