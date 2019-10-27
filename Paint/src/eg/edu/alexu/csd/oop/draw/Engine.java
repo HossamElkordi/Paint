@@ -68,26 +68,12 @@ public class Engine implements DrawingEngine {
 	}
 
 	public void undo() {
-		Memento memento = this.careTaker.getMemento(this.careTaker.getIndex() - 1);
-		if(memento == null) {
-			JOptionPane.showMessageDialog(null, "No prenious saves!");
-			return;
-		}
-		this.originator.getStateFromMemento(memento);
-		Shape[] state = this.originator.getState();
-		toArrayList(state);
+		getDesiredState(this.careTaker.getIndex() - 1);
 	}
 
 
 	public void redo() {
-		Memento memento = this.careTaker.getMemento(this.careTaker.getIndex() + 1);
-		if(memento == null) {
-			JOptionPane.showMessageDialog(null, "No more saves!");
-			return;
-		}
-		this.originator.getStateFromMemento(memento);
-		Shape[] state = this.originator.getState();
-		toArrayList(state);
+		getDesiredState(this.careTaker.getIndex() + 1);
 	}
 
 	public void save(String path) {
@@ -96,6 +82,17 @@ public class Engine implements DrawingEngine {
 
 	public void load(String path) {
 		
+	}
+	
+	private void getDesiredState(int index) {
+		Memento memento = this.careTaker.getMemento(index);
+		if (memento == null) {
+			JOptionPane.showMessageDialog(null, "No more saves!");
+			return;
+		}
+		this.originator.getStateFromMemento(memento);
+		Shape[] state = this.originator.getState();
+		this.toArrayList(state);
 	}
 	
 	private void toArrayList(Shape[] state) {
