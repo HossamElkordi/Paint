@@ -560,4 +560,13 @@ public class Controller {
     public void getNextState() {
     	engine.redo();
     }
+
+    public void keepOnDisk(String path) {
+    	engine.save(path);
+    }
+
+    public void getFromDisk(String path) {
+    	engine.load(path);
+    }
+    
 }

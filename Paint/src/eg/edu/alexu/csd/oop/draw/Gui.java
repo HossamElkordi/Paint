@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -16,6 +17,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -24,7 +26,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
-import java.awt.Toolkit;
+import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Gui extends JPanel{
 //ahmed yasser
@@ -41,6 +44,7 @@ public class Gui extends JPanel{
 	private JToggleButton selectBtn;
 	private JToggleButton brushBtn;
 	private JToggleButton deleteBtn;
+	private JFileChooser fileChooser;
 	
 	private char shapeChar = ' ';
 	private boolean brush;
@@ -58,6 +62,7 @@ public class Gui extends JPanel{
 	 */
 	public static void main(String[] args) {
 		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			new Gui();
 			frame.setVisible(true);
 		} catch (Exception e) {
@@ -106,10 +111,34 @@ public class Gui extends JPanel{
 		menuBar.add(mnFile);
 		
 		JMenuItem mntmSave = new JMenuItem("Save");
+		mntmSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Pick a directory");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Files", "xml", "json");
+				fileChooser.setFileFilter(filter);
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				if(fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
+					control.getFromDisk(fileChooser.getSelectedFile().getAbsolutePath());
+					update(getPanelGraphics());
+				}
+			}
+		});
 		mntmSave.setIcon(new ImageIcon(Gui.class.getResource("/Icons/save.png")));
 		mnFile.add(mntmSave);
 		
 		JMenuItem mntmOpen = new JMenuItem("open");
+		mntmOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Choose a file");
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
+					control.keepOnDisk(fileChooser.getSelectedFile().getAbsolutePath() + "\\");
+					update(getPanelGraphics());
+				}
+			}
+		});
 		mntmOpen.setIcon(new ImageIcon(Gui.class.getResource("/Icons/load.png")));
 		mnFile.add(mntmOpen);
 	}
