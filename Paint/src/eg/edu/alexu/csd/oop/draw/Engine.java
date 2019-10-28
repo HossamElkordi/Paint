@@ -1,6 +1,12 @@
 package eg.edu.alexu.csd.oop.draw;
 
 import java.awt.Graphics;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,11 +83,15 @@ public class Engine implements DrawingEngine {
 	}
 
 	public void save(String path) {
-		
+		if(path.contains(".xml")) {
+			saveXML(path);
+		}
 	}
 
 	public void load(String path) {
-		
+		if(path.contains(".xml")) {
+			loadXML(path);
+		}
 	}
 	
 	private void getDesiredState(int index) {
@@ -114,5 +124,30 @@ public class Engine implements DrawingEngine {
 			}
 		}
 	}
+	
+	private void saveXML(String path) {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File(path));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(this.shapes);
+			encoder.close();
+			fos.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
 
+	@SuppressWarnings("unchecked")
+	private void loadXML(String path) {
+		try {
+			FileInputStream fis = new FileInputStream(new File(path));
+			XMLDecoder decoder = new XMLDecoder(fis);
+			this.shapes = (ArrayList<Shape>)decoder.readObject();
+			this.careTaker = new CareTaker();
+			decoder.close();
+			fis.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
