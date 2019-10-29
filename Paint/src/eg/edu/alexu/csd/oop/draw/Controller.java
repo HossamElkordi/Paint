@@ -6,7 +6,7 @@ import java.awt.Point;
  
 public class Controller {
    
-    private Engine engine;
+    public Engine engine;
     
     private Shape shape;
     private FreeDrawing f;

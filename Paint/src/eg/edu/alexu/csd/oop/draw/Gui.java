@@ -49,7 +49,7 @@ public class Gui extends JPanel{
 	private JToggleButton deleteBtn;
 	private JFileChooser fileChooser;
 	private JComboBox<String> suppotedClsBox;
-	
+
 	private char shapeChar = ' ';
 	private boolean brush;
 	private boolean select;
@@ -481,7 +481,18 @@ public class Gui extends JPanel{
 	    	public void actionPerformed(ActionEvent e) {
 	    		setFileChooser("Choose a jar file", "jar");
 	    		if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-	    			
+	    			control.engine.installPluginShape(fileChooser.getSelectedFile().getAbsolutePath());
+					System.out.println(control.engine.getaddedShapes().size());
+					System.out.println(control.engine.getaddedShapes().get(0).getSimpleName());
+					//suppotedClsBox.addItem(control.engine.getaddedShapes().get(0).getSimpleName());
+					//System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
+	    			if(control.engine.getaddedShapes().size()!=0) {
+	    				suppotedClsBox.removeAllItems();
+	    				for(int i=0;i<control.engine.getaddedShapes().size();i++){
+							suppotedClsBox.addItem(control.engine.getaddedShapes().get(i).getSimpleName());
+						}
+
+					}
 	    		}
 	    		
 	    	}
