@@ -15,6 +15,7 @@ public interface DrawingEngine {
 	public Shape[] getShapes();
 	
 	public List<Class<? extends Shape>> getSupportedShapes();
+	public void installPluginShape(String jarPath);
 	
 	public void undo();
 	public void redo();

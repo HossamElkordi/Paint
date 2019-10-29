@@ -28,6 +28,9 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JComboBox;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class Gui extends JPanel{
 //ahmed yasser
@@ -45,6 +48,7 @@ public class Gui extends JPanel{
 	private JToggleButton brushBtn;
 	private JToggleButton deleteBtn;
 	private JFileChooser fileChooser;
+	private JComboBox<String> suppotedClsBox;
 	
 	private char shapeChar = ' ';
 	private boolean brush;
@@ -113,9 +117,7 @@ public class Gui extends JPanel{
 		JMenuItem mntmSave = new JMenuItem("Save");
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fileChooser = new JFileChooser();
-				fileChooser.setDialogTitle("Pick a directory");
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				setFileChooser("Pick a directory", "");
 				if(fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 					control.keepOnDisk(fileChooser.getSelectedFile().getAbsolutePath());
 				}
@@ -127,10 +129,7 @@ public class Gui extends JPanel{
 		JMenuItem mntmOpen = new JMenuItem("open");
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fileChooser = new JFileChooser();
-				fileChooser.setDialogTitle("Choose a file");
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Files", "xml", "json");
-				fileChooser.setFileFilter(filter);
+				setFileChooser("Choose a file", "xml,jason");
 				if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 					control.getFromDisk(fileChooser.getSelectedFile().getAbsolutePath());
 					update(getPanelGraphics());
@@ -158,6 +157,7 @@ public class Gui extends JPanel{
 	    setUndoBtn();
 	    setRedoBtn();
 	    setDeleteBtn();
+	    setClsLoadingStuff();
 	}
 	
 	private void setShapesBtns() {
@@ -175,6 +175,7 @@ public class Gui extends JPanel{
 	     *    not in the group button (brush and select)   
 	     */
 	    JToggleButton lineBtn = new JToggleButton("");
+	    lineBtn.setToolTipText("Line");
 	    lineBtn.setName("lineBtn");
 	    lineBtn.setIcon(new ImageIcon(Gui.class.getResource("/Icons/line.png")));
 	    lineBtn.setBounds(10, 11, 40, 30);
@@ -183,6 +184,7 @@ public class Gui extends JPanel{
 	    btnArray.add(lineBtn);
 	    
 	    JToggleButton rectBtn = new JToggleButton("");
+	    rectBtn.setToolTipText("Rectangle");
 	    rectBtn.setName("rectBtn");
 	    rectBtn.setIcon(new ImageIcon(Gui.class.getResource("/Icons/rect.png")));
 	    rectBtn.setBounds(59, 11, 40, 30);
@@ -191,6 +193,7 @@ public class Gui extends JPanel{
 	    btnArray.add(rectBtn);
 	    
 	    JToggleButton sqrBtn = new JToggleButton("");
+	    sqrBtn.setToolTipText("Square");
 	    sqrBtn.setName("sqrBtn");
 	    sqrBtn.setIcon(new ImageIcon(Gui.class.getResource("/Icons/square.png")));
 	    sqrBtn.setBounds(109, 11, 40, 30);
@@ -199,6 +202,7 @@ public class Gui extends JPanel{
 	    btnArray.add(sqrBtn);
 	    
 	    JToggleButton ellipseBtn = new JToggleButton("");
+	    ellipseBtn.setToolTipText("Ellipse");
 	    ellipseBtn.setName("ellipseBtn");
 	    ellipseBtn.setIcon(new ImageIcon(Gui.class.getResource("/Icons/ellipse.png")));
 	    ellipseBtn.setBounds(10, 52, 40, 30);
@@ -207,6 +211,7 @@ public class Gui extends JPanel{
 	    btnArray.add(ellipseBtn);
 	    
 	    JToggleButton circleBtn = new JToggleButton("");
+	    circleBtn.setToolTipText("Circle");
 	    circleBtn.setName("circleBtn");
 	    circleBtn.setIcon(new ImageIcon(Gui.class.getResource("/Icons/circle.png")));
 	    circleBtn.setBounds(59, 52, 40, 30);
@@ -215,6 +220,7 @@ public class Gui extends JPanel{
 	    btnArray.add(circleBtn);
 	    
 	    JToggleButton triangleBtn = new JToggleButton("");
+	    triangleBtn.setToolTipText("Triangle");
 	    triangleBtn.setName("triangleBtn");
 	    triangleBtn.setIcon(new ImageIcon(Gui.class.getResource("/Icons/triangle.png")));
 	    triangleBtn.setBounds(109, 52, 40, 30);
@@ -336,7 +342,7 @@ public class Gui extends JPanel{
 	    JButton fillColorBtn = new JButton("");
 	    fillColorBtn.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		fillColor = JColorChooser.showDialog(null, "Pick a Color", fillColor);
+	    		fillColor = JColorChooser.showDialog(frame, "Pick a Color", fillColor);
 	    		control.keepShapes(getPanelGraphics());
 				if(fillColor == null) {
 					fillColor = Color.WHITE;
@@ -357,7 +363,7 @@ public class Gui extends JPanel{
 	    JButton strokeColorBtn = new JButton("");
 	    strokeColorBtn.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		strokeColor = JColorChooser.showDialog(null, "Pick a Color", strokeColor);
+	    		strokeColor = JColorChooser.showDialog(frame, "Pick a Color", strokeColor);
 	    		control.keepShapes(getPanelGraphics());
 				if(strokeColor == null) {
 					strokeColor = Color.BLACK;
@@ -396,9 +402,9 @@ public class Gui extends JPanel{
 	    btnPanel.add(lblBrush);
 	    }
 	
-	
 	private void setUndoBtn() {
 		JButton undoBtn = new JButton("");
+		undoBtn.setToolTipText("Undo");
 		undoBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				shapeChar = ' ';
@@ -420,6 +426,7 @@ public class Gui extends JPanel{
 	
 	private void setRedoBtn() {
 		JButton redoBtn = new JButton("");
+		redoBtn.setToolTipText("Redo");
 		redoBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				shapeChar = ' ';
@@ -438,8 +445,7 @@ public class Gui extends JPanel{
 	    redoBtn.setBounds(977, 11, 40, 40);
 	    btnPanel.add(redoBtn);
 	}
-	
-	
+		
 	private void setDeleteBtn() {
 		deleteBtn = new JToggleButton("");
 		deleteBtn.addActionListener(new ActionListener() {
@@ -465,6 +471,44 @@ public class Gui extends JPanel{
 	    lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
 	    lblDelete.setBounds(465, 86, 46, 14);
 	    btnPanel.add(lblDelete);
+	}
+	
+	private void setClsLoadingStuff() {
+		JButton clsLoadBtn = new JButton("");
+		clsLoadBtn.setToolTipText("Load New Class");
+		clsLoadBtn.setIcon(new ImageIcon(Gui.class.getResource("/Icons/clsLoad.png")));
+	    clsLoadBtn.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		setFileChooser("Choose a jar file", "jar");
+	    		if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
+	    			
+	    		}
+	    		
+	    	}
+	    });
+	    clsLoadBtn.setBounds(581, 21, 30, 30);
+	    btnPanel.add(clsLoadBtn);
+	    
+	    suppotedClsBox = new JComboBox<String>();
+	    suppotedClsBox.addItemListener(new ItemListener() {
+	    	public void itemStateChanged(ItemEvent e) {
+	    		
+	    	}
+	    });
+	    suppotedClsBox.addItem("Set Shape");
+	    suppotedClsBox.setBounds(620, 21, 149, 30);
+	    btnPanel.add(suppotedClsBox);
+	    
+	    JToggleButton drawLoadedBtn = new JToggleButton("");
+	    drawLoadedBtn.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		
+	    	}
+	    });
+	    drawLoadedBtn.setToolTipText("Draw Loaded Shape");
+	    drawLoadedBtn.setIcon(new ImageIcon(Gui.class.getResource("/Icons/drawLoaded.png")));
+	    drawLoadedBtn.setBounds(779, 21, 30, 30);
+	    btnPanel.add(drawLoadedBtn);
 	}
 
 	public void setDrawingCanvas() {
@@ -558,5 +602,21 @@ public class Gui extends JPanel{
 	
 	public Graphics getPanelGraphics() {
 		return this.getGraphics();
+	}
+	
+	private void setFileChooser(String title, String extension) {
+		fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle(title);
+		if(extension.length() == 0) {
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		}else {
+			FileNameExtensionFilter filter;
+			if(extension.equals("jar")) {
+				filter = new FileNameExtensionFilter("Files", "jar");
+			}else {
+				filter = new FileNameExtensionFilter("Files", "xml", "json");
+			}
+			fileChooser.setFileFilter(filter);
+		}
 	}
 }

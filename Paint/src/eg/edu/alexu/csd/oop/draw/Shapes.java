@@ -12,7 +12,7 @@ public abstract class Shapes implements Shape {
 	private Map<String, Double> properties;
 	private Color fillColor;
 	private Color strokeColor;
-		
+			
 	public Shapes(int x1, int y1, Color fillColor, Color strokeColor) {
 		
 		properties = new HashMap<String, Double>();

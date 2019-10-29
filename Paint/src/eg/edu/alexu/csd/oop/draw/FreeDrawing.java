@@ -10,6 +10,10 @@ public class FreeDrawing extends Shapes{
 	private ArrayList<Point> points;
 	private Color color;
 	
+	public FreeDrawing() {
+		
+	}
+	
 	public FreeDrawing(Color color) {
 		points = new ArrayList<Point>();
 		this.color = color;

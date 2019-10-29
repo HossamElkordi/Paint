@@ -7,10 +7,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+
+import eg.edu.alexu.csd.oop.test.ReflectionHelper;
 
 public class Engine implements DrawingEngine {
 
@@ -19,7 +24,12 @@ public class Engine implements DrawingEngine {
 	
 	private ArrayList<Shape> shapes;
 	
+	private List<Class<? extends Shape>> supportedCls;
+	
 	public Engine() {
+		supportedCls = new ArrayList<Class<? extends Shape>>();
+		setInitialCls();
+		installPluginShape("/Paint/RoundRectangle.jar");
 		shapes = new ArrayList<Shape>();
 		originator = new Originator();
 		careTaker = new CareTaker();
@@ -69,8 +79,24 @@ public class Engine implements DrawingEngine {
 	}
 
 	public List<Class<? extends Shape>> getSupportedShapes() {
-		
-		return null;
+		return this.supportedCls;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public void installPluginShape(String jarPath) {
+		try {
+			File jar = new File(jarPath);
+			URL fileURL = jar.toURI().toURL();
+			String jarURL = "jar:" + fileURL + "!/";
+			URL[] urls = {new URL(jarURL)};
+			URLClassLoader ucl = new URLClassLoader(urls, this.getClass().getClassLoader());
+			String name = jarPath.substring(jarPath.lastIndexOf('/') + 1, jarPath.indexOf('.'));
+			Class<?> c = Class.forName(this.getClass().getPackage().getName() + "." + name, true, ucl);
+			this.supportedCls.add((Class<? extends Shape>) c);
+		} catch (MalformedURLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void undo() {
@@ -150,4 +176,13 @@ public class Engine implements DrawingEngine {
 			e.printStackTrace();
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	private void setInitialCls() {
+		List<Class<?>> cls = ReflectionHelper.findClassesImpmenenting(Shape.class, this.getClass().getPackage());
+		for(Class<?> c : cls) {
+			supportedCls.add((Class<? extends Shape>) c);
+		}
+	}
+	
 }
