@@ -29,7 +29,6 @@ public class Engine implements DrawingEngine {
 	public Engine() {
 		supportedCls = new ArrayList<Class<? extends Shape>>();
 		setInitialCls();
-		installPluginShape("/Paint/RoundRectangle.jar");
 		shapes = new ArrayList<Shape>();
 		originator = new Originator();
 		careTaker = new CareTaker();

@@ -43,6 +43,10 @@ public class Ellipse extends Shapes {
 	}
 	
 	public Object clone() throws CloneNotSupportedException{
+		Object o = super.clone();
+		if(o != null) {
+			return o;
+		}
 		int x1 = (int) Math.floor(super.getProperties().get("x1"));
 		int y1 = (int) Math.floor(super.getProperties().get("y1"));
 		int x2 = (int) Math.floor(super.getProperties().get("x2"));

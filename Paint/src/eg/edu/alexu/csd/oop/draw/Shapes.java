@@ -26,7 +26,10 @@ public abstract class Shapes implements Shape {
 	}
 	
 	public Shapes() {
-		
+		properties = new HashMap<String, Double>();
+		position = new Point(0, 0);
+		properties.put("x1", position.getX());
+		properties.put("y1", position.getX());
 	}
 
 	public void setPosition(Point position) {
@@ -69,8 +72,16 @@ public abstract class Shapes implements Shape {
 	abstract public void draw(Graphics canvas);
 
 	public Object clone() throws CloneNotSupportedException{
+		if(properties.size() == 2) {
+			try {
+				return this.getClass().newInstance();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
 		return null;
-		
 	}
 	
 }
