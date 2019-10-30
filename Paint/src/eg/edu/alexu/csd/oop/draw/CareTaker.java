@@ -13,6 +13,9 @@ public class CareTaker {
 				this.mementoList.remove(i);
 			}
 		}
+		if(this.mementoList.size() == 21) {
+			this.mementoList.remove(0);
+		}
 		this.mementoList.add(memento);
 		this.index = this.mementoList.indexOf(memento);
 	}

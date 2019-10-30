@@ -29,6 +29,7 @@ public class Engine implements DrawingEngine {
 	public Engine() {
 		supportedCls = new ArrayList<Class<? extends Shape>>();
 		setInitialCls();
+		installPluginShape("/Paint/RoundRectangle.jar");
 		shapes = new ArrayList<Shape>();
 		originator = new Originator();
 		careTaker = new CareTaker();
@@ -108,13 +109,13 @@ public class Engine implements DrawingEngine {
 	}
 
 	public void save(String path) {
-		if(path.contains(".xml")) {
+		if(path.toLowerCase().contains(".xml")) {
 			saveXML(path);
 		}
 	}
 
 	public void load(String path) {
-		if(path.contains(".xml")) {
+		if(path.toLowerCase().contains(".xml")) {
 			loadXML(path);
 		}
 	}

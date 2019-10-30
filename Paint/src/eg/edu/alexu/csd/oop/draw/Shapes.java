@@ -30,6 +30,8 @@ public abstract class Shapes implements Shape {
 		position = new Point(0, 0);
 		properties.put("x1", position.getX());
 		properties.put("y1", position.getX());
+		this.fillColor = Color.white;
+		this.strokeColor = Color.black;
 	}
 
 	public void setPosition(Point position) {
