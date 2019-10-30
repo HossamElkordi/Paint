@@ -24,10 +24,11 @@ public class Engine implements DrawingEngine {
 	
 	private ArrayList<Shape> shapes;
 	
-	private List<Class<? extends Shape>> supportedCls;
+	private List<Class<? extends Shape>> supportedCls,addedCls;
 	
 	public Engine() {
 		supportedCls = new ArrayList<Class<? extends Shape>>();
+		addedCls = new ArrayList<Class<? extends Shape>>();
 		setInitialCls();
 		installPluginShape("/Paint/RoundRectangle.jar");
 		shapes = new ArrayList<Shape>();
@@ -81,6 +82,10 @@ public class Engine implements DrawingEngine {
 	public List<Class<? extends Shape>> getSupportedShapes() {
 		return this.supportedCls;
 	}
+	public List<Class<? extends Shape>> getaddedShapes() {
+		return this.addedCls;
+	}
+
 	
 	
 	@SuppressWarnings("unchecked")
@@ -91,9 +96,10 @@ public class Engine implements DrawingEngine {
 			String jarURL = "jar:" + fileURL + "!/";
 			URL[] urls = {new URL(jarURL)};
 			URLClassLoader ucl = new URLClassLoader(urls, this.getClass().getClassLoader());
-			String name = jarPath.substring(jarPath.lastIndexOf('/') + 1, jarPath.indexOf('.'));
+			String name = jarPath.substring(jarPath.lastIndexOf('\\') + 1, jarPath.indexOf('.'));
 			Class<?> c = Class.forName(this.getClass().getPackage().getName() + "." + name, true, ucl);
 			this.supportedCls.add((Class<? extends Shape>) c);
+			this.addedCls.add((Class<? extends Shape>) c);
 		} catch (MalformedURLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

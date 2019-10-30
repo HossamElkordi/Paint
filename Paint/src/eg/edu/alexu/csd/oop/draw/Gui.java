@@ -49,7 +49,7 @@ public class Gui extends JPanel{
 	private JToggleButton deleteBtn;
 	private JFileChooser fileChooser;
 	private JComboBox<String> suppotedClsBox;
-	
+	private JToggleButton drawLoadedBtn;
 	private char shapeChar = ' ';
 	private boolean brush;
 	private boolean select;
@@ -182,6 +182,7 @@ public class Gui extends JPanel{
 	    btnPanel.add(lineBtn);
 	    bg.add(lineBtn);
 	    btnArray.add(lineBtn);
+	    bg.add(drawLoadedBtn);
 	    
 	    JToggleButton rectBtn = new JToggleButton("");
 	    rectBtn.setToolTipText("Rectangle");
@@ -301,6 +302,8 @@ public class Gui extends JPanel{
 				return 't';
 			case "freeDrawBtn":
 				return 'f';
+			case"drawLoadedBtn":
+				return 'z';
 		}
 		return ' ';
 	}
@@ -481,7 +484,18 @@ public class Gui extends JPanel{
 	    	public void actionPerformed(ActionEvent e) {
 	    		setFileChooser("Choose a jar file", "jar");
 	    		if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-	    			
+	    			control.engine.installPluginShape(fileChooser.getSelectedFile().getAbsolutePath());
+					System.out.println(control.engine.getaddedShapes().size());
+					System.out.println(control.engine.getaddedShapes().get(0).getSimpleName());
+					//suppotedClsBox.addItem(control.engine.getaddedShapes().get(0).getSimpleName());
+					//System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
+	    			if(control.engine.getaddedShapes().size()!=0) {
+	    				suppotedClsBox.removeAllItems();
+	    				for(int i=0;i<control.engine.getaddedShapes().size();i++){
+							suppotedClsBox.addItem(control.engine.getaddedShapes().get(i).getSimpleName());
+						}
+
+					}
 	    		}
 	    		
 	    	}
@@ -492,16 +506,17 @@ public class Gui extends JPanel{
 	    suppotedClsBox = new JComboBox<String>();
 	    suppotedClsBox.addItemListener(new ItemListener() {
 	    	public void itemStateChanged(ItemEvent e) {
-	    		
+
 	    	}
 	    });
 	    suppotedClsBox.addItem("Set Shape");
 	    suppotedClsBox.setBounds(620, 21, 149, 30);
 	    btnPanel.add(suppotedClsBox);
 	    
-	    JToggleButton drawLoadedBtn = new JToggleButton("");
+	    drawLoadedBtn = new JToggleButton("");
 	    drawLoadedBtn.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
+
 	    		
 	    	}
 	    });
