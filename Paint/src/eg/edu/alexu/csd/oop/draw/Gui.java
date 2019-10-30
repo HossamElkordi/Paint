@@ -49,7 +49,7 @@ public class Gui extends JPanel{
 	private JToggleButton deleteBtn;
 	private JFileChooser fileChooser;
 	private JComboBox<String> suppotedClsBox;
-
+	private JToggleButton drawLoadedBtn;
 	private char shapeChar = ' ';
 	private boolean brush;
 	private boolean select;
@@ -182,6 +182,7 @@ public class Gui extends JPanel{
 	    btnPanel.add(lineBtn);
 	    bg.add(lineBtn);
 	    btnArray.add(lineBtn);
+	    bg.add(drawLoadedBtn);
 	    
 	    JToggleButton rectBtn = new JToggleButton("");
 	    rectBtn.setToolTipText("Rectangle");
@@ -301,6 +302,8 @@ public class Gui extends JPanel{
 				return 't';
 			case "freeDrawBtn":
 				return 'f';
+			case"drawLoadedBtn":
+				return 'z';
 		}
 		return ' ';
 	}
@@ -503,16 +506,17 @@ public class Gui extends JPanel{
 	    suppotedClsBox = new JComboBox<String>();
 	    suppotedClsBox.addItemListener(new ItemListener() {
 	    	public void itemStateChanged(ItemEvent e) {
-	    		
+
 	    	}
 	    });
 	    suppotedClsBox.addItem("Set Shape");
 	    suppotedClsBox.setBounds(620, 21, 149, 30);
 	    btnPanel.add(suppotedClsBox);
 	    
-	    JToggleButton drawLoadedBtn = new JToggleButton("");
+	    drawLoadedBtn = new JToggleButton("");
 	    drawLoadedBtn.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
+
 	    		
 	    	}
 	    });

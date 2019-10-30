@@ -3,7 +3,8 @@ package eg.edu.alexu.csd.oop.draw;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
- 
+import java.lang.reflect.InvocationTargetException;
+
 public class Controller {
    
     public Engine engine;
@@ -16,6 +17,7 @@ public class Controller {
     private int selectedX1,selectedX2,selectedY1,selectedY2,selectedX3,selectedY3,firstX,firstY,dummyX,dummyY,deltaX,deltaY,state=0;
     boolean resizeFlag = false;
     boolean moving = false;
+    String type;
    
     public Controller() {
         engine = new Engine();
@@ -50,6 +52,19 @@ public class Controller {
                 f = new FreeDrawing(fillColor);
                 f.addPoint(x1, y1);
                 break;
+            case'z':
+                for(int i=0;i<engine.getaddedShapes().size();i++){
+                    if(engine.getaddedShapes().get(i).getName()==type){
+                        try {
+                            shape=engine.getaddedShapes().get(i).getDeclaredConstructor().newInstance();
+                            shape.setPosition(new Point(x1,y1));
+                            shape.setColor(strokeColor);
+                            shape.setFillColor(fillColor);
+                        } catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
         }
     }
  
