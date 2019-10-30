@@ -54,6 +54,9 @@ public class JSONWriter {
 				case "Character":
 					jsonString += "\n\t" + toJsonCharacter(me.getKey(), me.getValue()) + ",";
 					break;
+				case "JSONArray":
+					jsonString += "\n\t" + toJsonArray(me.getKey(), (JSONArray) me.getValue()) + ",";
+					break;
 				default :
 					jsonString += "\n\t" + toJsonObject(me.getValue()) + ",";
 			}
@@ -61,32 +64,44 @@ public class JSONWriter {
 		
 		jsonString = jsonString.substring(0, jsonString.length() - 1);
 		
-		jsonString += "}";
+		jsonString += "\n}";
 	}
 	
 	private String toJsonNUM(String key, Object value) {
+		if(key.length() == 0) {
+			return key;
+		}
 		return "\"" + key + "\" : " + value;
 	}
 	
 	private String toJsonBoolean(String key, Object value) {
+		if(key.length() == 0) {
+			return key;
+		}
 		return "\"" + key + "\" : " + value;
 	}
 	
 	private String toJsonString(String key, Object value) {
+		if(key.length() == 0) {
+			return "\"" + key + "\"";
+		}
 		return "\"" + key + "\" : \"" + value + "\"";
 	}
 	
 	private String toJsonCharacter(String key, Object value) {
+		if(key.length() == 0) {
+			return "\'" + key + "\'";
+		}
 		return "\"" + key + "\" : \'" + value + "\'";
 	}
 	
 	private String toJsonColor(Color color) {
 		String s = "\""+ color.getClass().getName() +"\" : " + "{";
 		
-		s += "\n\t\t" + toJsonNUM("Red", color.getRed()) + ",";
-		s += "\n\t\t" + toJsonNUM("Green", color.getGreen()) + ",";
-		s += "\n\t\t" + toJsonNUM("Blue", color.getBlue()) + ",";
-		s += "\n\t\t" + toJsonNUM("Alpha", color.getAlpha()) + ",";
+		s += "\n\t\t\t" + toJsonNUM("Red", color.getRed()) + ",";
+		s += "\n\t\t\t" + toJsonNUM("Green", color.getGreen()) + ",";
+		s += "\n\t\t\t" + toJsonNUM("Blue", color.getBlue()) + ",";
+		s += "\n\t\t\t" + toJsonNUM("Alpha", color.getAlpha()) + ",";
 		
 		s = s.substring(0, s.length() - 1);
 		s += "\n\t\t}";
@@ -106,23 +121,21 @@ public class JSONWriter {
 				case "Long":
 				case "Double":
 				case "Integer":
-					s += "\n\t\t" + toJsonNUM(me.getKey(), me.getValue()) + ",";
+					s += "\n\t\t\t" + toJsonNUM(me.getKey(), me.getValue()) + ",";
 					break;
 				case "Boolean":
-					s += "\n\t\t" + toJsonBoolean(me.getKey(), me.getValue()) + ",";
+					s += "\n\t\t\t" + toJsonBoolean(me.getKey(), me.getValue()) + ",";
 					break;
 				case "String":
-					s += "\n\t\t" + toJsonString(me.getKey(), me.getValue()) + ",";
+					s += "\n\t\t\t" + toJsonString(me.getKey(), me.getValue()) + ",";
 					break;
 				case "char":
 				case "Character":
-					s += "\n\t\t" + toJsonCharacter(me.getKey(), me.getValue()) + ",";
+					s += "\n\t\t\t" + toJsonCharacter(me.getKey(), me.getValue()) + ",";
 					break;
 				default :
-					s += "\n\t\t" + toJsonObject(me.getValue()) + ",";
-		}
-			
-			
+					s += "\n\t\t\t" + toJsonObject(me.getValue()) + ",";
+			}	
 		}
 		
 		s = s.substring(0, s.length() - 1);
@@ -130,9 +143,41 @@ public class JSONWriter {
 		return s;
 	}
 	
+	private String toJsonArray(String key,JSONArray value) {
+		String s = "\"" + key + "\" : [";
+		ArrayList<Object> list = value.getList();
+		for(int i = 0; i < list.size(); i++) {
+			switch(list.get(i).getClass().getSimpleName()) {
+				case "int":
+				case "Long":
+				case "Double":
+				case "Integer":
+					s += "\n\t\t\t" + toJsonNUM("", list.get(i)) + ",";
+					break;
+				case "Boolean":
+					s += "\n\t\t\t" + toJsonBoolean("", list.get(i)) + ",";
+					break;
+				case "String":
+					s += "\n\t\t\t" + toJsonString("", list.get(i)) + ",";
+					break;
+				case "char":
+				case "Character":
+					s += "\n\t\t\t" + toJsonCharacter("", list.get(i)) + ",";
+					break;
+				default :
+					s += "\n\t\t" + toJsonObject(list.get(i)) + ",";
+			}
+		}
+		if(s.charAt(s.length() - 1) != '[') {
+			s = s.substring(0, s.length() - 1);
+		}
+		s += "\n\t]";
+		return s;
+	}
+	
 	@SuppressWarnings("unchecked")
 	private String toJsonObject(Object value) {
-		String s = "\"" + value.getClass().getName() + "\" : " + "{\n\t";
+		String s = "\"" + value.getClass().getName() + "\" : " + "{\n";
 		
 		Class<?> cls = value.getClass();
 		Field[] fields = cls.getDeclaredFields();
@@ -148,27 +193,27 @@ public class JSONWriter {
 					case "Long":
 					case "Double":
 					case "Integer":
-						s += "\t" + f.getName() + " : " + toJsonNUM(f.getName(), f.get(value)) + ",\n";
+						s += "\t\t" + f.getName() + " : " + toJsonNUM(f.getName(), f.get(value)) + ",\n";
 						break;
 					case "Boolean":
-						s += "\t" + f.getName() + " : " + toJsonBoolean(f.getName(), f.get(value)) + ",\n";
+						s += "\t\t" + f.getName() + " : " + toJsonBoolean(f.getName(), f.get(value)) + ",\n";
 						break;
 					case "String":
-						s += "\t" + f.getName() + " : " + toJsonString(f.getName(), f.get(value)) + ",\n";
+						s += "\t\t" + f.getName() + " : " + toJsonString(f.getName(), f.get(value)) + ",\n";
 						break;
 					case "char":	
 					case "Character":
-						s += "\t" + f.getName() + " : " + toJsonCharacter(f.getName(), f.get(value)) + ",\n";
+						s += "\t\t" + f.getName() + " : " + toJsonCharacter(f.getName(), f.get(value)) + ",\n";
 						break;
 					case "Color":
-						s += "\t" + f.getName() + " : " + toJsonColor((Color) f.get(value)) + ",\n";
+						s += "\t\t" + f.getName() + " : " + toJsonColor((Color) f.get(value)) + ",\n";
 						break;	
 					case "Map":
-						s += "\t" + f.getName() + " : " + toJsonMap((HashMap<String, Object>) f.get(value)) + ",\n";
+						s += "\t\t" + f.getName() + " : " + toJsonMap((HashMap<String, Object>) f.get(value)) + ",\n";
 						break;
 					default:
 						if(types.contains(f.getType().getSimpleName())) {
-							s += "\t" + f.getName() + " : " + toJsonObject(f.get(value)) + ",\n";
+							s += "\t\t" + f.getName() + " : " + toJsonObject(f.get(value)) + ",\n";
 						}
 				}
 			}
@@ -176,9 +221,9 @@ public class JSONWriter {
 			e.printStackTrace();
 		}
 		
-		s = s.substring(0, s.length() - 1);
+		s = s.substring(0, s.length() - 2);
 		
-		s += "\n\t}\n";
+		s += "\n\t}";
 		return s;
 	}
 

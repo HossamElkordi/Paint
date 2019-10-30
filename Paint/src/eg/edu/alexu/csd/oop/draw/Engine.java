@@ -15,6 +15,10 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import eg.edu.alexu.csd.oop.json.JSONArray;
+import eg.edu.alexu.csd.oop.json.JSONObject;
+import eg.edu.alexu.csd.oop.json.JSONParser;
+import eg.edu.alexu.csd.oop.json.JSONWriter;
 import eg.edu.alexu.csd.oop.test.ReflectionHelper;
 
 public class Engine implements DrawingEngine {
@@ -30,7 +34,7 @@ public class Engine implements DrawingEngine {
 		supportedCls = new ArrayList<Class<? extends Shape>>();
 		addedCls = new ArrayList<Class<? extends Shape>>();
 		setInitialCls();
-		installPluginShape("/Paint/RoundRectangle.jar");
+		installPluginShape("\\Paint\\RoundRectangle.jar");
 		shapes = new ArrayList<Shape>();
 		originator = new Originator();
 		careTaker = new CareTaker();
@@ -96,7 +100,7 @@ public class Engine implements DrawingEngine {
 			String jarURL = "jar:" + fileURL + "!/";
 			URL[] urls = {new URL(jarURL)};
 			URLClassLoader ucl = new URLClassLoader(urls, this.getClass().getClassLoader());
-			String name = jarPath.substring(jarPath.lastIndexOf('\\') + 1, jarPath.indexOf('.'));
+			String name = jarPath.replaceAll("/", "\\").substring(jarPath.lastIndexOf('\\') + 1, jarPath.indexOf('.'));
 			Class<?> c = Class.forName(this.getClass().getPackage().getName() + "." + name, true, ucl);
 			this.supportedCls.add((Class<? extends Shape>) c);
 			this.addedCls.add((Class<? extends Shape>) c);
@@ -117,6 +121,8 @@ public class Engine implements DrawingEngine {
 	public void save(String path) {
 		if(path.toLowerCase().contains(".xml")) {
 			saveXML(path);
+		}else if(path.toLowerCase().contains(".json")) {
+			saveJSON(path);
 		}
 	}
 
@@ -167,6 +173,18 @@ public class Engine implements DrawingEngine {
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void saveJSON(String path) {
+		JSONObject obj = new JSONObject();
+		JSONArray shapes = new JSONArray();
+		for(int i = 0; i < this.shapes.size(); i++) {
+			shapes.add(this.shapes.get(i));
+		}
+		obj.put("Shapes", shapes);
+		
+		JSONWriter writer = new JSONWriter(obj);
+		new JSONParser(writer, path);
 	}
 
 	@SuppressWarnings("unchecked")

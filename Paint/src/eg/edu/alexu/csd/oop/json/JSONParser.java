@@ -16,9 +16,7 @@ public class JSONParser {
 	private void writeFile(String path) {
 		File file = new File(path);
 		try {
-			if(!file.exists()) {
-				file.createNewFile();
-			}
+			file.createNewFile();
 			PrintWriter pw = new PrintWriter(file);
 			pw.println(writer.getJsonString());
 			pw.close();
