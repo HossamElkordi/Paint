@@ -51,6 +51,8 @@ public class Controller {
             case 'f':
                 f = new FreeDrawing(fillColor);
                 f.addPoint(x1, y1);
+                f.getProperties().put("x" +f.getPoints().size(), 1.0 + x1);
+                f.getProperties().put("y" +f.getPoints().size(), 1.0 + y1);
                 break;
             case'z':
                 for(int i=0;i<engine.getaddedShapes().size();i++){
@@ -71,6 +73,8 @@ public class Controller {
     public void shapeDrawer(Graphics canvas, int x2, int y2) {
         if(f != null) {
             f.addPoint(x2, y2);
+            f.getProperties().put("x" +f.getPoints().size(), 1.0 + x2);
+            f.getProperties().put("y" +f.getPoints().size(), 1.0 + y2);
             f.draw(canvas);
             return;
         }
@@ -88,6 +92,8 @@ public class Controller {
     public void shapeFinisher(char shapeChar, int x2, int y2) {
         if(f != null) {
             f.addPoint(x2, y2);
+            f.getProperties().put("x" +f.getPoints().size(), 1.0 + x2);
+            f.getProperties().put("y" +f.getPoints().size(), 1.0 + y2);
             engine.addShape(f);
             f = null;
             return;

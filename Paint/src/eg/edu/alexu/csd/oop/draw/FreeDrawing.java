@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FreeDrawing extends Shapes{
 	
@@ -16,6 +17,9 @@ public class FreeDrawing extends Shapes{
 	
 	public FreeDrawing(Color color) {
 		points = new ArrayList<Point>();
+		super.setProperties(new HashMap<String, Double>());
+		super.setColor(color);
+		super.setFillColor(color);
 		this.color = color;
 	}
 	public void addPoint(int x, int y) {
@@ -23,17 +27,22 @@ public class FreeDrawing extends Shapes{
 	}
 	
 	public void draw(Graphics canvas) {
-		if(color != Color.WHITE) {
-			canvas.setColor(color);
+		if(super.getFillColor() != Color.WHITE) {
+			canvas.setColor(super.getFillColor());
 		}else {
 			canvas.setColor(Color.black);
 		}
-		for(int i = 0; i < points.size() - 1; i++) {
-			canvas.drawLine(points.get(i).x, points.get(i).y, points.get(i + 1).x, points.get(i + 1).y);
+		int i = 1;
+		while(super.getProperties().get("x" + (i+1)) != null) {
+			canvas.drawLine(super.getProperties().get("x" + i).intValue(), super.getProperties().get("y" + i).intValue(),
+					super.getProperties().get("x" + (i+1)).intValue(), super.getProperties().get("y" + (i+1)).intValue());
+			i++;
 		}
+		canvas.drawLine(super.getProperties().get("x" + i).intValue(), super.getProperties().get("y" + i).intValue(),
+				super.getProperties().get("x" + (i-1)).intValue(), super.getProperties().get("y" + (i-1)).intValue());
 	}
 	
-	private ArrayList<Point> getPoints() {
+	public ArrayList<Point> getPoints() {
 		return points;
 	}
 
@@ -44,6 +53,9 @@ public class FreeDrawing extends Shapes{
 	public Object clone() throws CloneNotSupportedException{
 		FreeDrawing f = new FreeDrawing(this.color);
 		f.setPoints(this.getPoints());
+		f.setProperties(super.getProperties());
+		f.setFillColor(getFillColor());
+		f.setColor(getColor());
 		return f;
 	}
 }

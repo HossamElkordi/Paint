@@ -16,10 +16,10 @@ public class JSONWriter {
 
 	public JSONWriter(JSONObject ojb) {
 		this.obj = ojb;
-		this.toSting();
 		types.add("int"); types.add("Integer"); types.add("Double"); types.add("Long"); types.add("String");
 		types.add("Character"); types.add("char"); types.add("Boolean"); types.add("Map"); types.add("Point");
 		types.add("Color"); types.add("JSONArray");
+		this.toSting();
 	}
 
 	public String getJsonString() {
@@ -212,6 +212,14 @@ public class JSONWriter {
 						break;
 					case "Color":
 						s += "\t\t" + f.getName() + " : " + toJsonColor((Color) f.get(value)) + ",\n";
+						break;
+					case "ArrayList":
+						JSONArray j = new JSONArray();
+						ArrayList<Object> a = (ArrayList<Object>)f.get(value);
+						for(int i = 0; i < a.size(); i++) {
+							j.add(a.get(i));
+						}
+						s += "\t\t" + " : " + toJsonArray(f.getName(), j) + ",\n";
 						break;
 					case "Map":
 						s += "\t\t" + f.getName() + " : " + toJsonMap((HashMap<String, Object>) f.get(value)) + ",\n";
