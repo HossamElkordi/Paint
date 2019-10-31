@@ -565,6 +565,8 @@ public class Controller {
    
     public void saveChanges() {
     	newShape.setProperties(selectedShape.getProperties());
+    	newShape.setColor(selectedShape.getColor());
+    	newShape.setFillColor(selectedShape.getFillColor());
     	engine.updateShape(selectedShape, newShape);
     }
     

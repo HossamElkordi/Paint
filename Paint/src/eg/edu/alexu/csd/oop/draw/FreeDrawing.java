@@ -18,14 +18,15 @@ public class FreeDrawing extends Shapes{
 		points = new ArrayList<Point>();
 		this.color = color;
 	}
-
 	public void addPoint(int x, int y) {
 		points.add(new Point(x, y));
 	}
 	
 	public void draw(Graphics canvas) {
 		if(color != Color.WHITE) {
-			canvas.setColor(super.getFillColor());
+			canvas.setColor(color);
+		}else {
+			canvas.setColor(Color.black);
 		}
 		for(int i = 0; i < points.size() - 1; i++) {
 			canvas.drawLine(points.get(i).x, points.get(i).y, points.get(i + 1).x, points.get(i + 1).y);

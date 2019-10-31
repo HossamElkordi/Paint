@@ -346,7 +346,6 @@ public class Gui extends JPanel{
 	    fillColorBtn.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		fillColor = JColorChooser.showDialog(frame, "Pick a Color", fillColor);
-	    		control.keepShapes(getPanelGraphics());
 				if(fillColor == null) {
 					fillColor = Color.WHITE;
 				}
@@ -367,7 +366,6 @@ public class Gui extends JPanel{
 	    strokeColorBtn.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		strokeColor = JColorChooser.showDialog(frame, "Pick a Color", strokeColor);
-	    		control.keepShapes(getPanelGraphics());
 				if(strokeColor == null) {
 					strokeColor = Color.BLACK;
 				}
@@ -610,6 +608,7 @@ public class Gui extends JPanel{
 		super.paintComponent(g);
 		if(shapeChar != ' ') {
 			 control.shapeDrawer(g, x2, y2);// drawing the desired shape
+			 control.keepShapes(getPanelGraphics());
 		}else {
 			control.keepShapes(getPanelGraphics());
 		}
