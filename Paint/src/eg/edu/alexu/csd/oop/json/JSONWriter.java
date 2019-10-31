@@ -9,11 +9,11 @@ import java.util.Map;
 import java.util.Set;
 
 public class JSONWriter {
-	
+
 	private String jsonString = "";
 	private JSONObject obj;
 	private static final ArrayList<String> types = new ArrayList<String>();
-	
+
 	public JSONWriter(JSONObject ojb) {
 		this.obj = ojb;
 		this.toSting();
@@ -21,21 +21,21 @@ public class JSONWriter {
 		types.add("Character"); types.add("char"); types.add("Boolean"); types.add("Map"); types.add("Point");
 		types.add("Color"); types.add("JSONArray");
 	}
-	
+
 	public String getJsonString() {
 		return jsonString;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void toSting() {
 		HashMap<String, Object> map = this.obj.getMap();
-		
+
 		jsonString = "{";
-		
+
 		Set<?> set = map.entrySet();
 		Iterator<?> i = set.iterator();
-		
+
 		while(i.hasNext()) {
-			@SuppressWarnings("unchecked")
 			Map.Entry<String, Object> me = (Map.Entry<String, Object>)i.next();
 			switch(me.getValue().getClass().getSimpleName()) {
 				case "int":
@@ -57,61 +57,64 @@ public class JSONWriter {
 				case "JSONArray":
 					jsonString += "\n\t" + toJsonArray(me.getKey(), (JSONArray) me.getValue()) + ",";
 					break;
+				case "HashMap":
+					jsonString += "\n\t" + me.getKey() + " : " + toJsonMap((HashMap<String, Object>)me.getValue()) + ",\n";
+					break;
 				default :
 					jsonString += "\n\t" + toJsonObject(me.getValue()) + ",";
 			}
 		}
-		
+
 		jsonString = jsonString.substring(0, jsonString.length() - 1);
-		
+
 		jsonString += "\n}";
 	}
-	
+
 	private String toJsonNUM(String key, Object value) {
 		if(key.length() == 0) {
 			return key;
 		}
-		return "\"" + key + "\" : " + value;
+		return "" + key + " : " + value;
 	}
-	
+
 	private String toJsonBoolean(String key, Object value) {
 		if(key.length() == 0) {
 			return key;
 		}
-		return "\"" + key + "\" : " + value;
+		return "" + key + " : " + value;
 	}
-	
+
 	private String toJsonString(String key, Object value) {
 		if(key.length() == 0) {
 			return "\"" + key + "\"";
 		}
-		return "\"" + key + "\" : \"" + value + "\"";
+		return "" + key + " : \"" + value + "\"";
 	}
-	
+
 	private String toJsonCharacter(String key, Object value) {
 		if(key.length() == 0) {
 			return "\'" + key + "\'";
 		}
-		return "\"" + key + "\" : \'" + value + "\'";
+		return "" + key + " : \'" + value + "\'";
 	}
-	
+
 	private String toJsonColor(Color color) {
 		String s = "\""+ color.getClass().getName() +"\" : " + "{";
-		
+
 		s += "\n\t\t\t" + toJsonNUM("Red", color.getRed()) + ",";
 		s += "\n\t\t\t" + toJsonNUM("Green", color.getGreen()) + ",";
 		s += "\n\t\t\t" + toJsonNUM("Blue", color.getBlue()) + ",";
 		s += "\n\t\t\t" + toJsonNUM("Alpha", color.getAlpha()) + ",";
-		
+
 		s = s.substring(0, s.length() - 1);
 		s += "\n\t\t}";
 		return s;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private String toJsonMap(HashMap<String, Object> m) {
 		String s = "\"" + m.getClass().getName() +"\" : " + "{";;
-		
+
 		Set<?> set = m.entrySet();
 		Iterator<?> i = set.iterator();
 		while(i.hasNext()) {
@@ -135,16 +138,18 @@ public class JSONWriter {
 					break;
 				default :
 					s += "\n\t\t\t" + toJsonObject(me.getValue()) + ",";
-			}	
+			}
 		}
-		
-		s = s.substring(0, s.length() - 1);
+
+		if(s.charAt(s.length() - 1) != '{') {
+			s = s.substring(0, s.length() - 1);
+		}
 		s += "\n\t\t}";
 		return s;
 	}
-	
+
 	private String toJsonArray(String key,JSONArray value) {
-		String s = "\"" + key + "\" : [";
+		String s = "" + key + " : [";
 		ArrayList<Object> list = value.getList();
 		for(int i = 0; i < list.size(); i++) {
 			switch(list.get(i).getClass().getSimpleName()) {
@@ -174,17 +179,17 @@ public class JSONWriter {
 		s += "\n\t]";
 		return s;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private String toJsonObject(Object value) {
 		String s = "\"" + value.getClass().getName() + "\" : " + "{\n";
-		
+
 		Class<?> cls = value.getClass();
 		Field[] fields = cls.getDeclaredFields();
 		if(fields.length == 0) {
 			fields = cls.getSuperclass().getDeclaredFields();
 		}
-		
+
 		try {
 			for(Field f : fields) {
 				f.setAccessible(true);
@@ -201,13 +206,13 @@ public class JSONWriter {
 					case "String":
 						s += "\t\t" + f.getName() + " : " + toJsonString(f.getName(), f.get(value)) + ",\n";
 						break;
-					case "char":	
+					case "char":
 					case "Character":
 						s += "\t\t" + f.getName() + " : " + toJsonCharacter(f.getName(), f.get(value)) + ",\n";
 						break;
 					case "Color":
 						s += "\t\t" + f.getName() + " : " + toJsonColor((Color) f.get(value)) + ",\n";
-						break;	
+						break;
 					case "Map":
 						s += "\t\t" + f.getName() + " : " + toJsonMap((HashMap<String, Object>) f.get(value)) + ",\n";
 						break;
@@ -220,9 +225,9 @@ public class JSONWriter {
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
+
 		s = s.substring(0, s.length() - 2);
-		
+
 		s += "\n\t}";
 		return s;
 	}
