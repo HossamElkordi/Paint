@@ -26,6 +26,7 @@ public class JSONWriter {
 		return jsonString;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void toSting() {
 		HashMap<String, Object> map = this.obj.getMap();
 		
@@ -35,7 +36,6 @@ public class JSONWriter {
 		Iterator<?> i = set.iterator();
 		
 		while(i.hasNext()) {
-			@SuppressWarnings("unchecked")
 			Map.Entry<String, Object> me = (Map.Entry<String, Object>)i.next();
 			switch(me.getValue().getClass().getSimpleName()) {
 				case "int":
@@ -57,6 +57,9 @@ public class JSONWriter {
 				case "JSONArray":
 					jsonString += "\n\t" + toJsonArray(me.getKey(), (JSONArray) me.getValue()) + ",";
 					break;
+				case "HashMap":
+					jsonString += "\n\t" + me.getKey() + " : " + toJsonMap((HashMap<String, Object>)me.getValue()) + ",\n";
+					break;
 				default :
 					jsonString += "\n\t" + toJsonObject(me.getValue()) + ",";
 			}
@@ -71,28 +74,28 @@ public class JSONWriter {
 		if(key.length() == 0) {
 			return key;
 		}
-		return "\"" + key + "\" : " + value;
+		return "" + key + " : " + value;
 	}
 	
 	private String toJsonBoolean(String key, Object value) {
 		if(key.length() == 0) {
 			return key;
 		}
-		return "\"" + key + "\" : " + value;
+		return "" + key + " : " + value;
 	}
 	
 	private String toJsonString(String key, Object value) {
 		if(key.length() == 0) {
 			return "\"" + key + "\"";
 		}
-		return "\"" + key + "\" : \"" + value + "\"";
+		return "" + key + " : \"" + value + "\"";
 	}
 	
 	private String toJsonCharacter(String key, Object value) {
 		if(key.length() == 0) {
 			return "\'" + key + "\'";
 		}
-		return "\"" + key + "\" : \'" + value + "\'";
+		return "" + key + " : \'" + value + "\'";
 	}
 	
 	private String toJsonColor(Color color) {
@@ -138,13 +141,15 @@ public class JSONWriter {
 			}	
 		}
 		
-		s = s.substring(0, s.length() - 1);
+		if(s.charAt(s.length() - 1) != '{') {
+			s = s.substring(0, s.length() - 1);
+		}
 		s += "\n\t\t}";
 		return s;
 	}
 	
 	private String toJsonArray(String key,JSONArray value) {
-		String s = "\"" + key + "\" : [";
+		String s = "" + key + " : [";
 		ArrayList<Object> list = value.getList();
 		for(int i = 0; i < list.size(); i++) {
 			switch(list.get(i).getClass().getSimpleName()) {
