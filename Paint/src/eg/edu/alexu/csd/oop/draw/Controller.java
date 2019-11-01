@@ -134,6 +134,7 @@ public class Controller {
                 break;
         }
         engine.addShape(shape);
+        shape = null;
     }
    
     private void lineProp(int x1, int y1, int x2, int y2) {
