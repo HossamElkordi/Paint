@@ -37,19 +37,22 @@ public class JSONMapToShapeArray {
                 e.printStackTrace();
             }
             if(ins!=null){
-                ins.setProperties((Map<String, Double>) temp.get("properties"));
-                ins.setFillColor(new Color(
-                        ((Map<String, Double>)temp.get("fillColor")).get("Red").intValue(),
-                        ((Map<String, Double>)temp.get("fillColor")).get("Green").intValue(),
-                        ((Map<String, Double>)temp.get("fillColor")).get("Blue").intValue(),
-                        ((Map<String, Double>)temp.get("fillColor")).get("Alpha").intValue())
-                );
-                ins.setColor(new Color(
-                        ((Map<String, Double>)temp.get("strokeColor")).get("Red").intValue(),
-                        ((Map<String, Double>)temp.get("strokeColor")).get("Green").intValue(),
-                        ((Map<String, Double>)temp.get("strokeColor")).get("Blue").intValue(),
-                        ((Map<String, Double>)temp.get("strokeColor")).get("Alpha").intValue())
-                );
+            	if(temp != null) {
+            		ins.setProperties((Map<String, Double>) temp.get("properties"));
+                    ins.setFillColor(new Color(
+                            ((Map<String, Double>)temp.get("fillColor")).get("Red").intValue(),
+                            ((Map<String, Double>)temp.get("fillColor")).get("Green").intValue(),
+                            ((Map<String, Double>)temp.get("fillColor")).get("Blue").intValue(),
+                            ((Map<String, Double>)temp.get("fillColor")).get("Alpha").intValue())
+                    );
+                    ins.setColor(new Color(
+                            ((Map<String, Double>)temp.get("strokeColor")).get("Red").intValue(),
+                            ((Map<String, Double>)temp.get("strokeColor")).get("Green").intValue(),
+                            ((Map<String, Double>)temp.get("strokeColor")).get("Blue").intValue(),
+                            ((Map<String, Double>)temp.get("strokeColor")).get("Alpha").intValue())
+                    );
+            	}
+                
 
             }
             output.add(ins);

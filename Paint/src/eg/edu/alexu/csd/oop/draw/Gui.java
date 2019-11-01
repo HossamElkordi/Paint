@@ -523,6 +523,7 @@ public class Gui extends JPanel{
 	    btnPanel.add(suppotedClsBox);
 	    
 	    drawLoadedBtn = new JToggleButton("");
+	    drawLoadedBtn.setName("drawLoadedBtn");
 	    drawLoadedBtn.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if(drawLoadedBtn.isSelected()) {

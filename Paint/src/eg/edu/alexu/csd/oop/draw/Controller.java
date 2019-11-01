@@ -106,6 +106,9 @@ public class Controller {
             f = null;
             return;
         }
+        if(shape == null) {
+        	return;
+        }
         shape.getProperties().put("x2", (double) x2);
         shape.getProperties().put("y2", (double) y2);
         int x1 = (int) Math.floor(shape.getProperties().get("x1"));

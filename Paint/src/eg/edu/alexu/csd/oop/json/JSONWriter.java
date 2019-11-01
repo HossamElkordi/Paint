@@ -99,6 +99,9 @@ public class JSONWriter {
 	}
 
 	private String toJsonColor(Color color) {
+		if(color == null) {
+			return "";
+		}
 		String s = "\""+ color.getClass().getName() +"\" : " + "{";
 
 		s += "\n\t\t\t" + toJsonNUM("Red", color.getRed()) + ",";
@@ -113,6 +116,9 @@ public class JSONWriter {
 
 	@SuppressWarnings("unchecked")
 	private String toJsonMap(HashMap<String, Object> m) {
+		if(m == null) {
+			return "";
+		}
 		String s = "\"" + m.getClass().getName() +"\" : " + "{";;
 
 		Set<?> set = m.entrySet();
@@ -182,6 +188,9 @@ public class JSONWriter {
 
 	@SuppressWarnings("unchecked")
 	private String toJsonObject(Object value) {
+		if(value == null) {
+			return "";
+		}
 		String s = "\"" + value.getClass().getName() + "\" : " + "{\n";
 
 		Class<?> cls = value.getClass();
