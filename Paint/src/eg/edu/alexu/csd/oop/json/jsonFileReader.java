@@ -6,13 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class jsonFileReader {
     jasonMapToShapeArray toarr=new jasonMapToShapeArray();
     jsonFileToMap tomap;
-    public ArrayList<Shape> output(String path) throws IOException {
-        String k = null;
+    public ArrayList<Shape> output(String path, List<Class<? extends Shape>> cls) throws IOException {
+        String k = "";
         FileReader fr =
                 new FileReader(path);
 
@@ -21,6 +22,7 @@ public class jsonFileReader {
             k = k + ((char) i);
         }
         tomap=new jsonFileToMap(k);
+        toarr.supported=cls;
         return toarr.output(tomap.getOutput());
         
     }

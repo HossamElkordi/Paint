@@ -1,5 +1,7 @@
 package eg.edu.alexu.csd.oop.draw;
 
+import eg.edu.alexu.csd.oop.json.jsonFileReader;
+
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -11,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -133,7 +136,15 @@ public class Gui extends JPanel{
 				if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 					control.getFromDisk(fileChooser.getSelectedFile().getAbsolutePath());
 					update(getPanelGraphics());
+					jsonFileReader x=new jsonFileReader();
+					try {
+						control.engine.setarr(x.output(fileChooser.getSelectedFile().getAbsolutePath(),control.engine.getSupportedShapes()) );
+						update(getPanelGraphics());
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
 				}
+
 			}
 		});
 		mntmOpen.setIcon(new ImageIcon(Gui.class.getResource("/Icons/load.png")));

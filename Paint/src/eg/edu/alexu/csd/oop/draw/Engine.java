@@ -89,6 +89,9 @@ public class Engine implements DrawingEngine {
 	public List<Class<? extends Shape>> getaddedShapes() {
 		return this.addedCls;
 	}
+	public void setarr(ArrayList<Shape>shapes){
+		this.shapes=shapes;
+	}
 
 	
 	

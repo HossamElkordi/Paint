@@ -8,12 +8,13 @@ import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class jasonMapToShapeArray {
     ArrayList<Shape> output=new ArrayList<>();
     Map<String,Object> input=new HashMap<>();
-    ArrayList<Class>supported=new ArrayList<>();
+    List<Class<? extends Shape>> supported=new ArrayList<>();
 
     public ArrayList<Shape> output( Map<String,Object> input) {
         Map<String,Object> temp=new HashMap<>();
@@ -25,7 +26,7 @@ public class jasonMapToShapeArray {
             temp= (Map<String, Object>) input.get(Integer.toString(i));
             type= (String) temp.get("type");
             for(int j=0;j<supported.size();j++){
-                if(supported.get(j).getName()==type){
+                if(supported.get(j).getName().equals(type)){
                     chosentype=supported.get(j);
                 }
             }
@@ -38,21 +39,21 @@ public class jasonMapToShapeArray {
             if(ins!=null){
                 ins.setProperties((Map<String, Double>) temp.get("properties"));
                 ins.setFillColor(new Color(
-                        ((Map<String, Double>)temp.get("fillcolor")).get("Red").intValue(),
-                        ((Map<String, Double>)temp.get("fillcolor")).get("Green").intValue(),
-                        ((Map<String, Double>)temp.get("fillcolor")).get("Blue").intValue(),
-                        ((Map<String, Double>)temp.get("fillcolor")).get("Alpha").intValue())
+                        ((Map<String, Double>)temp.get("fillColor")).get("Red").intValue(),
+                        ((Map<String, Double>)temp.get("fillColor")).get("Green").intValue(),
+                        ((Map<String, Double>)temp.get("fillColor")).get("Blue").intValue(),
+                        ((Map<String, Double>)temp.get("fillColor")).get("Alpha").intValue())
                 );
                 ins.setColor(new Color(
-                        ((Map<String, Double>)temp.get("strokecolor")).get("Red").intValue(),
-                        ((Map<String, Double>)temp.get("strokecolor")).get("Green").intValue(),
-                        ((Map<String, Double>)temp.get("strokecolor")).get("Blue").intValue(),
-                        ((Map<String, Double>)temp.get("strokecolor")).get("Alpha").intValue())
+                        ((Map<String, Double>)temp.get("strokeColor")).get("Red").intValue(),
+                        ((Map<String, Double>)temp.get("strokeColor")).get("Green").intValue(),
+                        ((Map<String, Double>)temp.get("strokeColor")).get("Blue").intValue(),
+                        ((Map<String, Double>)temp.get("strokeColor")).get("Alpha").intValue())
                 );
 
             }
             output.add(ins);
-
+            i++;
         }
         return output;
     }
