@@ -1,7 +1,5 @@
 package eg.edu.alexu.csd.oop.draw;
 
-import eg.edu.alexu.csd.oop.json.JSONFileReader;
-
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -13,7 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -26,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
@@ -123,7 +121,9 @@ public class Gui extends JPanel{
 				setFileChooser("Pick a directory", "");
 				if(fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 					control.keepOnDisk(fileChooser.getSelectedFile().getAbsolutePath());
+					return;
 				}
+				JOptionPane.showMessageDialog(frame, "File already exists!");
 			}
 		});
 		mntmSave.setIcon(new ImageIcon(Gui.class.getResource("/Icons/save.png")));
@@ -135,11 +135,11 @@ public class Gui extends JPanel{
 				setFileChooser("Choose a file", "xml,jason");
 				if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 					control.getFromDisk(fileChooser.getSelectedFile().getAbsolutePath());
-					control.engine.load(fileChooser.getSelectedFile().getAbsolutePath());
+					bg.clearSelection();
+					shapeChar = ' ';
 					update(getPanelGraphics());
 
 				}
-
 			}
 		});
 		mntmOpen.setIcon(new ImageIcon(Gui.class.getResource("/Icons/load.png")));
@@ -488,18 +488,23 @@ public class Gui extends JPanel{
 	    	public void actionPerformed(ActionEvent e) {
 	    		setFileChooser("Choose a jar file", "jar");
 	    		if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-	    			control.engine.installPluginShape(fileChooser.getSelectedFile().getAbsolutePath());
-					System.out.println(control.engine.getaddedShapes().size());
-					System.out.println(control.engine.getaddedShapes().get(0).getSimpleName());
-					//suppotedClsBox.addItem(control.engine.getaddedShapes().get(0).getSimpleName());
-					//System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
-	    			if(control.engine.getaddedShapes().size()!=0) {
-	    				suppotedClsBox.removeAllItems();
-	    				for(int i=0;i<control.engine.getaddedShapes().size();i++){
-							suppotedClsBox.addItem(control.engine.getaddedShapes().get(i).getSimpleName());
-						}
-
-					}
+	    			String s = control.addNewShape(fileChooser.getSelectedFile().getAbsolutePath());
+	    			if(s != null) {
+	    				suppotedClsBox.addItem(s);
+	    			}else {
+	    				JOptionPane.showMessageDialog(frame, "Shape is not Supported!");
+	    			}
+//					System.out.println(control.engine.getaddedShapes().size());
+//					System.out.println(control.engine.getaddedShapes().get(0).getSimpleName());
+//					suppotedClsBox.addItem(control.engine.getaddedShapes().get(0).getSimpleName());
+//					System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
+//	    			if(control.engine.getaddedShapes().size()!=0) {
+//	    				suppotedClsBox.removeAllItems();
+//	    				for(int i=0;i<control.engine.getaddedShapes().size();i++){
+//							suppotedClsBox.addItem(control.engine.getaddedShapes().get(i).getSimpleName());
+//						}
+//
+//					}
 	    		}
 	    		
 	    	}
@@ -510,18 +515,30 @@ public class Gui extends JPanel{
 	    suppotedClsBox = new JComboBox<String>();
 	    suppotedClsBox.addItemListener(new ItemListener() {
 	    	public void itemStateChanged(ItemEvent e) {
-
+	    		control.setType(e.getItem().toString());
 	    	}
 	    });
-	    suppotedClsBox.addItem("Set Shape");
+	    suppotedClsBox.addItem("Select a Shape");
 	    suppotedClsBox.setBounds(620, 21, 149, 30);
 	    btnPanel.add(suppotedClsBox);
 	    
 	    drawLoadedBtn = new JToggleButton("");
 	    drawLoadedBtn.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-
-	    		
+	    		if(drawLoadedBtn.isSelected()) {
+	    			if(getShapeChar(drawLoadedBtn.getName()) == shapeChar) {
+	    				bg.clearSelection();
+	    				shapeChar = ' ';
+	    			}else {
+	    				shapeChar = getShapeChar(drawLoadedBtn.getName());
+						selectBtn.setSelected(false);
+						brushBtn.setSelected(false);
+						deleteBtn.setSelected(false);
+						brush = false;
+						select = false;
+		    			delete = false;
+	    			}
+	    		}	    		
 	    	}
 	    });
 	    drawLoadedBtn.setToolTipText("Draw Loaded Shape");

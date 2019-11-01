@@ -13,6 +13,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import javax.swing.JOptionPane;
 
 import eg.edu.alexu.csd.oop.json.*;
@@ -25,11 +26,10 @@ public class Engine implements DrawingEngine {
 	
 	private ArrayList<Shape> shapes;
 	
-	private List<Class<? extends Shape>> supportedCls,addedCls;
+	private List<Class<? extends Shape>> supportedCls;
 	
 	public Engine() {
 		supportedCls = new ArrayList<Class<? extends Shape>>();
-		addedCls = new ArrayList<Class<? extends Shape>>();
 		setInitialCls();
 		installPluginShape("\\Paint\\RoundRectangle.jar");
 		shapes = new ArrayList<Shape>();
@@ -83,12 +83,12 @@ public class Engine implements DrawingEngine {
 	public List<Class<? extends Shape>> getSupportedShapes() {
 		return this.supportedCls;
 	}
-	public List<Class<? extends Shape>> getaddedShapes() {
-		return this.addedCls;
-	}
-	public void setarr(ArrayList<Shape>shapes){
-		this.shapes=shapes;
-	}
+//	public List<Class<? extends Shape>> getaddedShapes() {
+//		return this.addedCls;
+//	}
+//	public void setarr(ArrayList<Shape>shapes){
+//		this.shapes=shapes;
+//	}
 
 	
 	
@@ -103,7 +103,7 @@ public class Engine implements DrawingEngine {
 			String name = jarPath.replaceAll("/", "\\").substring(jarPath.lastIndexOf('\\') + 1, jarPath.indexOf('.'));
 			Class<?> c = Class.forName(this.getClass().getPackage().getName() + "." + name, true, ucl);
 			this.supportedCls.add((Class<? extends Shape>) c);
-			this.addedCls.add((Class<? extends Shape>) c);
+//			this.addedCls.add((Class<? extends Shape>) c);
 		} catch (MalformedURLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -112,7 +112,6 @@ public class Engine implements DrawingEngine {
 	public void undo() {
 		getDesiredState(this.careTaker.getIndex() - 1);
 	}
-
 
 	public void redo() {
 		getDesiredState(this.careTaker.getIndex() + 1);
@@ -129,9 +128,11 @@ public class Engine implements DrawingEngine {
 	public void load(String path) {
 		if(path.toLowerCase().contains(".xml")) {
 			loadXML(path);
+			this.careTaker = new CareTaker();
 		}
         else if(path.toLowerCase().contains(".json")) {
             loadJSON(path);
+            this.careTaker = new CareTaker();
         }
 	}
 	
@@ -196,13 +197,13 @@ public class Engine implements DrawingEngine {
 			FileInputStream fis = new FileInputStream(new File(path));
 			XMLDecoder decoder = new XMLDecoder(fis);
 			this.shapes = (ArrayList<Shape>)decoder.readObject();
-			this.careTaker = new CareTaker();
 			decoder.close();
 			fis.close();
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
     private void loadJSON(String path) {
         JSONFileReader x=new JSONFileReader();
 	    try {
@@ -211,7 +212,8 @@ public class Engine implements DrawingEngine {
             e.printStackTrace();
         }
     }
-	@SuppressWarnings("unchecked")
+	
+    @SuppressWarnings("unchecked")
 	private void setInitialCls() {
 		List<Class<?>> cls = ReflectionHelper.findClassesImpmenenting(Shape.class, this.getClass().getPackage());
 		for(Class<?> c : cls) {

@@ -11,13 +11,18 @@ public class Controller {
     
     private Shape shape;
     private FreeDrawing f;
+    private int fIndex = 1;
     private Point firstPoint;
     private Shape selectedShape;
     private Shape newShape;
     private int selectedX1,selectedX2,selectedY1,selectedY2,selectedX3,selectedY3,firstX,firstY,dummyX,dummyY,deltaX,deltaY,state=0;
     boolean resizeFlag = false;
-    boolean moving = false;
-    String type;
+    public void setType(String type) {
+		this.type = type;
+	}
+
+	boolean moving = false;
+    private String type;
    
     public Controller() {
         engine = new Engine();
@@ -50,15 +55,16 @@ public class Controller {
                 break;
             case 'f':
                 f = new FreeDrawing(fillColor);
-                f.addPoint(x1, y1);
-                f.getProperties().put("x" +f.getPoints().size(), 1.0 + x1);
-                f.getProperties().put("y" +f.getPoints().size(), 1.0 + y1);
+//                f.addPoint(x1, y1);
+                f.getProperties().put("x" + fIndex, 1.0 + x1);
+                f.getProperties().put("y" + fIndex, 1.0 + y1);
+                fIndex++;
                 break;
             case'z':
-                for(int i=0;i<engine.getaddedShapes().size();i++){
-                    if(engine.getaddedShapes().get(i).getName()==type){
+                for(int i=0;i<engine.getSupportedShapes().size();i++){
+                    if(engine.getSupportedShapes().get(i).getSimpleName().equals(type)){
                         try {
-                            shape=engine.getaddedShapes().get(i).getDeclaredConstructor().newInstance();
+                            shape = engine.getSupportedShapes().get(i).getDeclaredConstructor().newInstance();
                             shape.setPosition(new Point(x1,y1));
                             shape.setColor(strokeColor);
                             shape.setFillColor(fillColor);
@@ -72,9 +78,10 @@ public class Controller {
  
     public void shapeDrawer(Graphics canvas, int x2, int y2) {
         if(f != null) {
-            f.addPoint(x2, y2);
-            f.getProperties().put("x" +f.getPoints().size(), 1.0 + x2);
-            f.getProperties().put("y" +f.getPoints().size(), 1.0 + y2);
+//            f.addPoint(x2, y2);
+            f.getProperties().put("x" + fIndex, 1.0 + x2);
+            f.getProperties().put("y" + fIndex, 1.0 + y2);
+            fIndex++;
             f.draw(canvas);
             return;
         }
@@ -91,9 +98,10 @@ public class Controller {
  
     public void shapeFinisher(char shapeChar, int x2, int y2) {
         if(f != null) {
-            f.addPoint(x2, y2);
-            f.getProperties().put("x" +f.getPoints().size(), 1.0 + x2);
-            f.getProperties().put("y" +f.getPoints().size(), 1.0 + y2);
+//            f.addPoint(x2, y2);
+            f.getProperties().put("x" + fIndex, 1.0 + x2);
+            f.getProperties().put("y" + fIndex, 1.0 + y2);
+            fIndex = 1;
             engine.addShape(f);
             f = null;
             return;
@@ -590,6 +598,16 @@ public class Controller {
 
     public void getFromDisk(String path) {
     	engine.load(path);
+    }
+    
+    public String addNewShape(String jarPath) {
+    	int oldSize = engine.getSupportedShapes().size();
+    	engine.installPluginShape(jarPath);
+    	int newSize = engine.getSupportedShapes().size();
+    	if(newSize == oldSize) {
+    		return null;
+    	}
+    	return engine.getSupportedShapes().get(newSize - 1).getSimpleName();
     }
     
 }

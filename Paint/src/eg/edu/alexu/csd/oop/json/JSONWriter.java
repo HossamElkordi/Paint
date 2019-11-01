@@ -213,14 +213,14 @@ public class JSONWriter {
 					case "Color":
 						s += "\t\t" + f.getName() + " : " + toJsonColor((Color) f.get(value)) + ",\n";
 						break;
-					case "ArrayList":
-						JSONArray j = new JSONArray();
-						ArrayList<Object> a = (ArrayList<Object>)f.get(value);
-						for(int i = 0; i < a.size(); i++) {
-							j.add(a.get(i));
-						}
-						s += "\t\t" + " : " + toJsonArray(f.getName(), j) + ",\n";
-						break;
+//					case "ArrayList":
+//						JSONArray j = new JSONArray();
+//						ArrayList<Object> a = (ArrayList<Object>)f.get(value);
+//						for(int i = 0; i < a.size(); i++) {
+//							j.add(a.get(i));
+//						}
+//						s += "\t\t" + " : " + toJsonArray(f.getName(), j) + ",\n";
+//						break;
 					case "Map":
 						s += "\t\t" + f.getName() + " : " + toJsonMap((HashMap<String, Object>) f.get(value)) + ",\n";
 						break;
