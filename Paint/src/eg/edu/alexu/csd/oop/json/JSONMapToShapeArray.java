@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class jasonMapToShapeArray {
+public class JSONMapToShapeArray {
     ArrayList<Shape> output=new ArrayList<>();
     Map<String,Object> input=new HashMap<>();
     List<Class<? extends Shape>> supported=new ArrayList<>();

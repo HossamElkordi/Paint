@@ -1,6 +1,6 @@
 package eg.edu.alexu.csd.oop.draw;
 
-import eg.edu.alexu.csd.oop.json.jsonFileReader;
+import eg.edu.alexu.csd.oop.json.JSONFileReader;
 
 import java.awt.Color;
 import java.awt.Frame;
@@ -135,14 +135,9 @@ public class Gui extends JPanel{
 				setFileChooser("Choose a file", "xml,jason");
 				if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 					control.getFromDisk(fileChooser.getSelectedFile().getAbsolutePath());
+					control.engine.load(fileChooser.getSelectedFile().getAbsolutePath());
 					update(getPanelGraphics());
-					jsonFileReader x=new jsonFileReader();
-					try {
-						control.engine.setarr(x.output(fileChooser.getSelectedFile().getAbsolutePath(),control.engine.getSupportedShapes()) );
-						update(getPanelGraphics());
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
+
 				}
 
 			}

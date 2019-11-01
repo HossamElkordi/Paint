@@ -15,10 +15,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import eg.edu.alexu.csd.oop.json.JSONArray;
-import eg.edu.alexu.csd.oop.json.JSONObject;
-import eg.edu.alexu.csd.oop.json.JSONParser;
-import eg.edu.alexu.csd.oop.json.JSONWriter;
+import eg.edu.alexu.csd.oop.json.*;
 import eg.edu.alexu.csd.oop.test.ReflectionHelper;
 
 public class Engine implements DrawingEngine {
@@ -133,6 +130,9 @@ public class Engine implements DrawingEngine {
 		if(path.toLowerCase().contains(".xml")) {
 			loadXML(path);
 		}
+        else if(path.toLowerCase().contains(".json")) {
+            loadJSON(path);
+        }
 	}
 	
 	private void getDesiredState(int index) {
@@ -203,7 +203,14 @@ public class Engine implements DrawingEngine {
 			e.printStackTrace();
 		}
 	}
-
+    private void loadJSON(String path) {
+        JSONFileReader x=new JSONFileReader();
+	    try {
+            this.shapes=x.output(path,this.getSupportedShapes());
+        }catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
 	@SuppressWarnings("unchecked")
 	private void setInitialCls() {
 		List<Class<?>> cls = ReflectionHelper.findClassesImpmenenting(Shape.class, this.getClass().getPackage());

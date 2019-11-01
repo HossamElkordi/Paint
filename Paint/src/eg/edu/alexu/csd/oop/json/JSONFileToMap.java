@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-public class jsonFileToMap {
+public class JSONFileToMap {
     Map<String,Object> output;
     String input;
     String typeString;
@@ -13,7 +13,7 @@ public class jsonFileToMap {
     //Stack temp=new Stack<Character>();
 
 
-    public jsonFileToMap(String input) {
+    public JSONFileToMap(String input) {
         output=new HashMap();
         this.input=input;
         this.stringIterator();
