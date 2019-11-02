@@ -26,6 +26,7 @@ public class JSONMapToShapeArray {
         while(input.containsKey(Integer.toString(i))){
             temp= (Map<String, Object>) input.get(Integer.toString(i));
             Type= (String) temp.get("Type");
+            chosentype=null;
             for(int j=0;j<supported.size();j++){
                 if(supported.get(j).getName().equals(Type)){
                     chosentype=supported.get(j);
