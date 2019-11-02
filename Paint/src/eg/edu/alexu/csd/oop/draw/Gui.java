@@ -515,7 +515,9 @@ public class Gui extends JPanel{
 	    suppotedClsBox = new JComboBox<String>();
 	    suppotedClsBox.addItemListener(new ItemListener() {
 	    	public void itemStateChanged(ItemEvent e) {
-	    		control.setType(e.getItem().toString());
+	    		if(e.getStateChange() == 1) {
+	    			control.setType(e.getItem().toString());
+	    		}
 	    	}
 	    });
 	    suppotedClsBox.addItem("Select a Shape");

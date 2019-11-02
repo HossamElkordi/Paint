@@ -61,7 +61,7 @@ public class JSONWriter {
 					jsonString += "\n\t" + me.getKey() + " : " + toJsonMap((HashMap<String, Object>)me.getValue()) + ",\n";
 					break;
 				default :
-					jsonString += "\n\t" + toJsonObject(me.getValue()) + ",";
+					jsonString += "\n\t" + "\"" + me.getValue().getClass().getName() + "\"" + toJsonObject(me.getValue()) + ",";
 			}
 		}
 
@@ -100,7 +100,7 @@ public class JSONWriter {
 
 	private String toJsonColor(Color color) {
 		if(color == null) {
-			return "";
+			return " : { }";
 		}
 		String s = "\""+ color.getClass().getName() +"\" : " + "{";
 
@@ -117,7 +117,7 @@ public class JSONWriter {
 	@SuppressWarnings("unchecked")
 	private String toJsonMap(HashMap<String, Object> m) {
 		if(m == null) {
-			return "";
+			return " : { }";
 		}
 		String s = "\"" + m.getClass().getName() +"\" : " + "{";;
 
@@ -143,7 +143,7 @@ public class JSONWriter {
 					s += "\n\t\t\t" + toJsonCharacter(me.getKey(), me.getValue()) + ",";
 					break;
 				default :
-					s += "\n\t\t\t" + toJsonObject(me.getValue()) + ",";
+					s += "\n\t\t\t" + "\"" + me.getValue().getClass().getName() + "\""  + toJsonObject(me.getValue()) + ",";
 			}
 		}
 
@@ -176,7 +176,7 @@ public class JSONWriter {
 					s += "\n\t\t\t" + toJsonCharacter("", list.get(i)) + ",";
 					break;
 				default :
-					s += "\n\t\t" + toJsonObject(list.get(i)) + ",";
+					s += "\n\t\t" + "\"" + list.get(i).getClass().getName() + "\""  + toJsonObject(list.get(i)) + ",";
 			}
 		}
 		if(s.charAt(s.length() - 1) != '[') {
@@ -189,9 +189,9 @@ public class JSONWriter {
 	@SuppressWarnings("unchecked")
 	private String toJsonObject(Object value) {
 		if(value == null) {
-			return "";
+			return " : { }";
 		}
-		String s = "\"" + value.getClass().getName() + "\" : " + "{\n";
+		String s = " : " + "{\n";
 
 		Class<?> cls = value.getClass();
 		Field[] fields = cls.getDeclaredFields();
@@ -220,22 +220,14 @@ public class JSONWriter {
 						s += "\t\t" + f.getName() + " : " + toJsonCharacter(f.getName(), f.get(value)) + ",\n";
 						break;
 					case "Color":
-						s += "\t\t" + f.getName() + " : " + toJsonColor((Color) f.get(value)) + ",\n";
+						s += "\t\t"  + f.getName() + " : " + "\"" + f.getType().getName() + "\"" + toJsonColor((Color) f.get(value)) + ",\n";
 						break;
-//					case "ArrayList":
-//						JSONArray j = new JSONArray();
-//						ArrayList<Object> a = (ArrayList<Object>)f.get(value);
-//						for(int i = 0; i < a.size(); i++) {
-//							j.add(a.get(i));
-//						}
-//						s += "\t\t" + " : " + toJsonArray(f.getName(), j) + ",\n";
-//						break;
 					case "Map":
-						s += "\t\t" + f.getName() + " : " + toJsonMap((HashMap<String, Object>) f.get(value)) + ",\n";
+						s += "\t\t" + f.getName() + " : " + "\"" + f.getType().getName() + "\"" + toJsonMap((HashMap<String, Object>) f.get(value)) + ",\n";
 						break;
 					default:
 						if(types.contains(f.getType().getSimpleName())) {
-							s += "\t\t" + f.getName() + " : " + toJsonObject(f.get(value)) + ",\n";
+							s += "\t\t" + f.getName() + " : " + "\"" + f.getType().getName() + "\"" + toJsonObject(f.get(value)) + ",\n";
 						}
 				}
 			}
