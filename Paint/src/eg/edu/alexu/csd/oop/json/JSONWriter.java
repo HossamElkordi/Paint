@@ -58,7 +58,7 @@ public class JSONWriter {
 					jsonString += "\n\t" + toJsonArray(me.getKey(), (JSONArray) me.getValue()) + ",";
 					break;
 				case "HashMap":
-					jsonString += "\n\t" + me.getKey() + " : " + toJsonMap((HashMap<String, Object>)me.getValue()) + ",\n";
+					jsonString += "\n\t" + me.getKey() + " : " + "\"" + me.getValue().getClass().getName() + toJsonMap((HashMap<String, Object>)me.getValue()) + ",\n";
 					break;
 				default :
 					jsonString += "\n\t" + "\"" + me.getValue().getClass().getName() + "\"" + toJsonObject(me.getValue()) + ",";
@@ -102,7 +102,7 @@ public class JSONWriter {
 		if(color == null) {
 			return " : { }";
 		}
-		String s = "\""+ color.getClass().getName() +"\" : " + "{";
+		String s = " : " + "{";
 
 		s += "\n\t\t\t" + toJsonNUM("Red", color.getRed()) + ",";
 		s += "\n\t\t\t" + toJsonNUM("Green", color.getGreen()) + ",";
@@ -119,7 +119,7 @@ public class JSONWriter {
 		if(m == null) {
 			return " : { }";
 		}
-		String s = "\"" + m.getClass().getName() +"\" : " + "{";;
+		String s = " : " + "{";;
 
 		Set<?> set = m.entrySet();
 		Iterator<?> i = set.iterator();

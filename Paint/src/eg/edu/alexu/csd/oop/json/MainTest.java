@@ -7,12 +7,13 @@ public class MainTest {
 
 	public static void main(String[] args) {
 		JSONObject obj = new JSONObject();
+		JSONArray arr = new JSONArray();
 		Engine e = new Engine();
 		for(Class<? extends Shape> cls : e.getSupportedShapes()) {
-			if (cls.getSimpleName().equals("Circle")) {
+			if (cls.getSimpleName().equals("Rectangle")) {
 				try {
 					Shape s = (Shape)cls.newInstance();
-					obj.put("Shape", s);
+					arr.add(s);
 				} catch (InstantiationException e1) {
 					e1.printStackTrace();
 				} catch (IllegalAccessException e1) {
@@ -20,6 +21,7 @@ public class MainTest {
 				}
 			}
 		}
+		obj.put("array", arr);
 		JSONWriter wr = new JSONWriter(obj);
 		
 		new JSONParser(wr, "C:\\Users\\Geek\\Desktop\\test.json");
