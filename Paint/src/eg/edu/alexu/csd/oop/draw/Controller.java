@@ -68,6 +68,8 @@ public class Controller {
                             shape.setPosition(new Point(x1,y1));
                             shape.setColor(strokeColor);
                             shape.setFillColor(fillColor);
+                            shape.getProperties().put("x1", (double) x1);
+                            shape.getProperties().put("y1", (double) y1);
                         } catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
                             e.printStackTrace();
                         }
