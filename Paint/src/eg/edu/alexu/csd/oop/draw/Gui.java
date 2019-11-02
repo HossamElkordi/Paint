@@ -171,8 +171,6 @@ public class Gui extends JPanel{
 	    lblShapes.setHorizontalAlignment(SwingConstants.CENTER);
 	    lblShapes.setBounds(10, 86, 139, 14);
 	    btnPanel.add(lblShapes);
-	    
-		
 	    /*
 	     * Every shape drawing button has the same functionality:
 	     * 1- if it's already selected (shape and shapeChar are set to a certain object and character depending on the selected button) 
@@ -494,17 +492,6 @@ public class Gui extends JPanel{
 	    			}else {
 	    				JOptionPane.showMessageDialog(frame, "Shape is not Supported!");
 	    			}
-//					System.out.println(control.engine.getaddedShapes().size());
-//					System.out.println(control.engine.getaddedShapes().get(0).getSimpleName());
-//					suppotedClsBox.addItem(control.engine.getaddedShapes().get(0).getSimpleName());
-//					System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
-//	    			if(control.engine.getaddedShapes().size()!=0) {
-//	    				suppotedClsBox.removeAllItems();
-//	    				for(int i=0;i<control.engine.getaddedShapes().size();i++){
-//							suppotedClsBox.addItem(control.engine.getaddedShapes().get(i).getSimpleName());
-//						}
-//
-//					}
 	    		}
 	    		
 	    	}

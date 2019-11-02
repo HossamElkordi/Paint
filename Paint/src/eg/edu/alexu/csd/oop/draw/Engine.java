@@ -18,6 +18,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import eg.edu.alexu.csd.oop.json.*;
+import eg.edu.alexu.csd.oop.memento.*;
 import eg.edu.alexu.csd.oop.test.ReflectionHelper;
 
 public class Engine implements DrawingEngine {
@@ -84,14 +85,6 @@ public class Engine implements DrawingEngine {
 	public List<Class<? extends Shape>> getSupportedShapes() {
 		return this.supportedCls;
 	}
-//	public List<Class<? extends Shape>> getaddedShapes() {
-//		return this.addedCls;
-//	}
-//	public void setarr(ArrayList<Shape>shapes){
-//		this.shapes=shapes;
-//	}
-
-	
 	
 	@SuppressWarnings("unchecked")
 	public void installPluginShape(String jarPath) {
@@ -104,7 +97,6 @@ public class Engine implements DrawingEngine {
 			String name = jarPath.replaceAll("/", "\\").substring(jarPath.lastIndexOf('\\') + 1, jarPath.indexOf('.'));
 			Class<?> c = Class.forName(this.getClass().getPackage().getName() + "." + name, true, ucl);
 			this.supportedCls.add((Class<? extends Shape>) c);
-//			this.addedCls.add((Class<? extends Shape>) c);
 		} catch (MalformedURLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

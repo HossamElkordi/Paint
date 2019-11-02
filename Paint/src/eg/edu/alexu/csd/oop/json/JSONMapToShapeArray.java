@@ -17,7 +17,8 @@ public class JSONMapToShapeArray {
     Map<String,Object> input=new HashMap<>();
     List<Class<? extends Shape>> supported=new ArrayList<>();
 
-    public ArrayList<Shape> output( Map<String,Object> input) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList<Shape> output( Map<String,Object> input) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Map<String,Object> temp=new HashMap<>();
         String Type;
         Class chosentype = null;

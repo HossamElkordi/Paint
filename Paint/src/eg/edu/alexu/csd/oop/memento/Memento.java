@@ -1,4 +1,6 @@
-package eg.edu.alexu.csd.oop.draw;
+package eg.edu.alexu.csd.oop.memento;
+
+import eg.edu.alexu.csd.oop.draw.Shape;
 
 public class Memento {
 

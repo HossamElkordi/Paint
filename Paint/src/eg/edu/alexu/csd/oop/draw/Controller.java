@@ -55,7 +55,6 @@ public class Controller {
                 break;
             case 'f':
                 f = new FreeDrawing(fillColor);
-//                f.addPoint(x1, y1);
                 f.getProperties().put("x" + fIndex, 1.0 + x1);
                 f.getProperties().put("y" + fIndex, 1.0 + y1);
                 fIndex++;
@@ -80,7 +79,6 @@ public class Controller {
  
     public void shapeDrawer(Graphics canvas, int x2, int y2) {
         if(f != null) {
-//            f.addPoint(x2, y2);
             f.getProperties().put("x" + fIndex, 1.0 + x2);
             f.getProperties().put("y" + fIndex, 1.0 + y2);
             fIndex++;
@@ -100,7 +98,6 @@ public class Controller {
  
     public void shapeFinisher(char shapeChar, int x2, int y2) {
         if(f != null) {
-//            f.addPoint(x2, y2);
             f.getProperties().put("x" + fIndex, 1.0 + x2);
             f.getProperties().put("y" + fIndex, 1.0 + y2);
             fIndex = 1;
