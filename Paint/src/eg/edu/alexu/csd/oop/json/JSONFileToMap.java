@@ -29,7 +29,7 @@ public class JSONFileToMap {
 
                 if(input.charAt(i)=='['){
                     tempMap=layer0(input.substring(i+1,nextcloser(input,i)-1));
-                    output.put("type","array");
+                    output.put("Type","array");
                     output.put("value",tempMap);
                     output.put("name",nameString);
                     i=nextcloser(input,i)-1;
@@ -105,7 +105,7 @@ public class JSONFileToMap {
     public Map<String,Object> layer1(String input,String type){
         Map<String,Object> output=new HashMap<>();
         String nameString=new String(),typeString=new String();;
-        output.put("type",type);
+        output.put("Type",type);
         int i=0;
         while(i<input.length()) {
             if(Character.isLetter(input.charAt(i))){
@@ -139,7 +139,7 @@ public class JSONFileToMap {
     public Map<String,Object> layer2(String input,String type){
         Map<String,Object> output=new HashMap<>();
         String nameString=new String(),valueString=new String();
-        output.put("type",type);
+        output.put("Type",type);
         int i=0;
         while(i<input.length()) {
             if(Character.isLetter(input.charAt(i))){

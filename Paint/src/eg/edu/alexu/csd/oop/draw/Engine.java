@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -208,7 +209,7 @@ public class Engine implements DrawingEngine {
         JSONFileReader x=new JSONFileReader();
 	    try {
             this.shapes=x.output(path,this.getSupportedShapes());
-        }catch(IOException e) {
+        }catch(IOException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
