@@ -72,28 +72,28 @@ public class JSONWriter {
 
 	private String toJsonNUM(String key, Object value) {
 		if(key.length() == 0) {
-			return key;
+			return "" + value;
 		}
 		return "" + key + " : " + value;
 	}
 
 	private String toJsonBoolean(String key, Object value) {
 		if(key.length() == 0) {
-			return key;
+			return "" + value;
 		}
 		return "" + key + " : " + value;
 	}
 
 	private String toJsonString(String key, Object value) {
 		if(key.length() == 0) {
-			return "\"" + key + "\"";
+			return "\"" + value + "\"";
 		}
 		return "" + key + " : \"" + value + "\"";
 	}
 
 	private String toJsonCharacter(String key, Object value) {
 		if(key.length() == 0) {
-			return "\'" + key + "\'";
+			return "\'" + value + "\'";
 		}
 		return "" + key + " : \'" + value + "\'";
 	}
@@ -207,17 +207,17 @@ public class JSONWriter {
 					case "Long":
 					case "Double":
 					case "Integer":
-						s += "\t\t" + f.getName() + " : " + toJsonNUM(f.getName(), f.get(value)) + ",\n";
+						s += "\t\t\t" + f.getName() + " : " + toJsonNUM("", f.get(value)) + ",\n";
 						break;
 					case "Boolean":
-						s += "\t\t" + f.getName() + " : " + toJsonBoolean(f.getName(), f.get(value)) + ",\n";
+						s += "\t\t\t" + f.getName() + " : " + toJsonBoolean("", f.get(value)) + ",\n";
 						break;
 					case "String":
-						s += "\t\t" + f.getName() + " : " + toJsonString(f.getName(), f.get(value)) + ",\n";
+						s += "\t\t\t" + f.getName() + " : " + toJsonString("", f.get(value)) + ",\n";
 						break;
 					case "char":
 					case "Character":
-						s += "\t\t" + f.getName() + " : " + toJsonCharacter(f.getName(), f.get(value)) + ",\n";
+						s += "\t\t\t" + f.getName() + " : " + toJsonCharacter("", f.get(value)) + ",\n";
 						break;
 					case "Color":
 						s += "\t\t"  + f.getName() + " : " + "\"" + f.getType().getName() + "\"" + toJsonColor((Color) f.get(value)) + ",\n";

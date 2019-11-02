@@ -23,8 +23,8 @@ public class MainTest {
 		}
 		obj.put("array", arr);
 		JSONWriter wr = new JSONWriter(obj);
-		
-		new JSONParser(wr, "C:\\Users\\Geek\\Desktop\\test.json");
+		System.out.println(wr.getJsonString());
+//		new JSONParser(wr, "C:\\Users\\Geek\\Desktop\\test.json");
 	}
 
 }
