@@ -83,9 +83,10 @@ public class JSONMapToShapeArray {
                         } else {
                             Field[] subf = c.getDeclaredFields();
                             for (int k = 0; k < subf.length; k++) {
-                                if (map.containsKey(getNeededSubstring(subf[k].toString()))) {
+                                if (map.containsKey(subf[k].getName())) {
                                     if (getType(subf[k].toString()).equals("int")) {
-                                        int out = Integer.parseInt((String) map.get(getNeededSubstring(subf[k].toString())));
+                                        double tempo=Double.parseDouble( map.get(subf[k].getName()).toString());
+                                        int out = (int) Math.round(tempo);
                                         subf[k].setAccessible(true);
                                         subf[k].set(obj, out);
 
