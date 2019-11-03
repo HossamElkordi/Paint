@@ -45,6 +45,7 @@ public class Gui extends JPanel{
 	private JPanel btnPanel;
 	private ButtonGroup bg;
 	private ArrayList<JToggleButton> btnArray;
+	private JToggleButton freeDrawBtn;
 	private JToggleButton selectBtn;
 	private JToggleButton brushBtn;
 	private JToggleButton deleteBtn;
@@ -259,7 +260,7 @@ public class Gui extends JPanel{
 	}
 	
 	public void setFreeDrawingBtn() {
-		JToggleButton freeDrawBtn = new JToggleButton("");
+		freeDrawBtn = new JToggleButton("");
 		freeDrawBtn.setName("freeDrawBtn");
 		freeDrawBtn.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
@@ -521,6 +522,8 @@ public class Gui extends JPanel{
 	    				shapeChar = ' ';
 	    			}else {
 	    				shapeChar = getShapeChar(drawLoadedBtn.getName());
+	    				bg.clearSelection();
+	    				freeDrawBtn.setSelected(false);
 						selectBtn.setSelected(false);
 						brushBtn.setSelected(false);
 						deleteBtn.setSelected(false);
