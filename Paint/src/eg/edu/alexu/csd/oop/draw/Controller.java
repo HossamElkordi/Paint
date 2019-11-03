@@ -37,15 +37,18 @@ public class Controller {
         switch(shapeChar) {
             case 'l':
                 shape = new LineSegment(x1, y1, fillColor, strokeColor);
+                shape.setPosition(new Point(x1, y1));
                 break;
             case 'r':
                 shape = new Rectangle(x1, y1, fillColor, strokeColor);
+                shape.setPosition(new Point(x1, y1));
                 break;
             case 's':
                 shape = new Square(x1, y1, fillColor, strokeColor);
                 break;
             case 'e':
                 shape = new Ellipse(x1, y1, fillColor, strokeColor);
+                shape.setPosition(new Point(x1, y1));
                 break;
             case 'c':
                 shape = new Circle(x1, y1, fillColor, strokeColor);
@@ -88,6 +91,10 @@ public class Controller {
         if(shape != null) {
             shape.getProperties().put("x2", (double) x2);
             shape.getProperties().put("y2", (double) y2);
+            if(!(shape.getProperties().get("Width") == null) || (shape.getProperties().get("Length") == null)){
+            	shape.getProperties().put("Width", (double) Math.abs(shape.getPosition().x - x2));
+            	shape.getProperties().put("Length", (double) Math.abs(shape.getPosition().y - y2));
+            }
             if(shape.getClass().getSimpleName().equals("Triangle")) {
                 shape.getProperties().put("y3", (double) y2);
             }
