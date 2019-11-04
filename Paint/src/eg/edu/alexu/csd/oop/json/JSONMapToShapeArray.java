@@ -1,7 +1,5 @@
 package eg.edu.alexu.csd.oop.json;
 
-import eg.edu.alexu.csd.oop.draw.Circle;
-import eg.edu.alexu.csd.oop.draw.LineSegment;
 import eg.edu.alexu.csd.oop.draw.Shape;
 
 import java.awt.*;
@@ -104,26 +102,8 @@ public class JSONMapToShapeArray {
                             f[j].set(ins, obj);
 
                         }
-                        /////
                     }
             	}
-
-
-            	    /*
-            		ins.setProperties((Map<String, Double>) temp.get("properties"));
-                    ins.setFillColor(new Color(
-                            ((Map<String, Double>)temp.get("fillColor")).get("Red").intValue(),
-                            ((Map<String, Double>)temp.get("fillColor")).get("Green").intValue(),
-                            ((Map<String, Double>)temp.get("fillColor")).get("Blue").intValue(),
-                            ((Map<String, Double>)temp.get("fillColor")).get("Alpha").intValue())
-                    );
-                    ins.setColor(new Color(
-                            ((Map<String, Double>)temp.get("strokeColor")).get("Red").intValue(),
-                            ((Map<String, Double>)temp.get("strokeColor")).get("Green").intValue(),
-                            ((Map<String, Double>)temp.get("strokeColor")).get("Blue").intValue(),
-                            ((Map<String, Double>)temp.get("strokeColor")).get("Alpha").intValue())
-                    );*/
-
             }
                 
 

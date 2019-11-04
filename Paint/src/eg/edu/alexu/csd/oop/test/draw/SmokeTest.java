@@ -1,16 +1,11 @@
 package eg.edu.alexu.csd.oop.test.draw;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
 import java.util.List;
-import java.util.Map;
 
 import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.Shape;

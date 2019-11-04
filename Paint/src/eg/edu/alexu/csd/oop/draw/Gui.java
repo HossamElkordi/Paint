@@ -629,7 +629,7 @@ public class Gui extends JPanel{
 			control.keepShapes(getPanelGraphics());
 		}
 	}
-		
+	
 	public Graphics getPanelGraphics() {
 		return this.getGraphics();
 	}

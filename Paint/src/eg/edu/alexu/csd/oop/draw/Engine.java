@@ -46,6 +46,7 @@ public class Engine implements DrawingEngine {
 	
 	public void refresh(Graphics canvas) {
 		for (Shape s : shapes) {
+//			System.out.println(s);
 			s.draw(canvas);
 		}
 	}

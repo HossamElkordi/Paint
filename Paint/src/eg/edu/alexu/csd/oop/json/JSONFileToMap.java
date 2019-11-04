@@ -2,7 +2,6 @@ package eg.edu.alexu.csd.oop.json;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 
 public class JSONFileToMap {
     Map<String,Object> output;
@@ -13,8 +12,8 @@ public class JSONFileToMap {
     //Stack temp=new Stack<Character>();
 
 
-    public JSONFileToMap(String input) {
-        output=new HashMap();
+	public JSONFileToMap(String input) {
+        output=new HashMap<String, Object>();
         this.input=input;
         this.stringIterator();
 

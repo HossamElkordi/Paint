@@ -21,6 +21,7 @@ public class JSONFileReader {
         while ((i=fr.read()) != -1) {
             k = k + ((char) i);
         }
+        fr.close();
         tomap=new JSONFileToMap(k);
         toarr.supported=cls;
         return toarr.output(tomap.getOutput());
