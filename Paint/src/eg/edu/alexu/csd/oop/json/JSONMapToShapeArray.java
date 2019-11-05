@@ -17,7 +17,8 @@ public class JSONMapToShapeArray {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	public ArrayList<Shape> output( Map<String,Object> input) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Map<String,Object> temp=new HashMap<>();
+       //System.out.println(input.size() + "  " + input.toString());
+    	Map<String,Object> temp=new HashMap<>();
         String Type;
         Class chosentype = null;
         input= (Map<String, Object>) input.get("value");
@@ -26,11 +27,7 @@ public class JSONMapToShapeArray {
             temp= (Map<String, Object>) input.get(Integer.toString(i));
             Type= (String) temp.get("Type");
             chosentype=null;
-            for(int j=0;j<supported.size();j++){
-                if(supported.get(j).getName().equals(Type)){
-                    chosentype=supported.get(j);
-                }
-            }
+            chosentype = Class.forName(Type);    
             Shape ins=null;
             try {if(chosentype!=null){
                 ins= (Shape) chosentype.getDeclaredConstructor().newInstance();}

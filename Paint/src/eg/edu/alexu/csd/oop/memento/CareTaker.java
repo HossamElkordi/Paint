@@ -31,4 +31,8 @@ public class CareTaker {
 	public int getIndex() {
 		return index;
 	}
+	
+	public void resetList() {
+		mementoList.clear();
+	}
 }

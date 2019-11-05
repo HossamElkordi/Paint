@@ -46,7 +46,6 @@ public class Engine implements DrawingEngine {
 	
 	public void refresh(Graphics canvas) {
 		for (Shape s : shapes) {
-//			System.out.println(s);
 			s.draw(canvas);
 		}
 	}
@@ -122,11 +121,15 @@ public class Engine implements DrawingEngine {
 	public void load(String path) {
 		if(path.toLowerCase().contains(".xml")) {
 			loadXML(path);
-			this.careTaker = new CareTaker();
+			this.careTaker.resetList();
+			this.originator.setState(this.getShapes());
+			this.careTaker.addMemento(this.originator.saveStateToMemento());
 		}
         else if(path.toLowerCase().contains(".json")) {
             loadJSON(path);
-            this.careTaker = new CareTaker();
+            this.careTaker.resetList();
+            this.originator.setState(this.getShapes());
+    		this.careTaker.addMemento(this.originator.saveStateToMemento());
         }
 	}
 	
